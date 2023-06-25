@@ -1,0 +1,20 @@
+{
+  // Built-in Settings
+  "editor.codeActionsOnSave": { "source.fixAll": true },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": { "strings": true },
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "explorer.sortOrderLexicographicOptions": "upper",
+  "files.associations": { "*.css": "tailwindcss" },
+  "javascript.preferences.quoteStyle": "double",
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
+  // Extensions Settings
+  "path-autocomplete.enableFolderTrailingSlash": false,
+  "path-autocomplete.extensionOnImport": true,
+  "path-autocomplete.pathMappings": { "$root": "${folder}/src" },
+  "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName"],
+  "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
+}

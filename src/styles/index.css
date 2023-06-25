@@ -1,0 +1,26 @@
+@import 'antd/dist/reset.css';
+@import './antd.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  @apply flex min-h-0 grow flex-col;
+}
+
+body {
+  @apply antialiased;
+}
+
+*,
+::before,
+::after {
+  @apply box-border border-0 border-solid border-current;
+}
+
+#webpack-dev-server-client-overlay {
+  @apply hidden;
+}

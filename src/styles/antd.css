@@ -1,0 +1,13 @@
+/* Prefer modifying theme variables in antdTheme.ts */
+/* See components: https://github.com/ant-design/ant-design/tree/master/components */
+
+/* Popover */
+.ant-popover {
+  @apply font-[number:inherit];
+}
+.ant-popover-arrow {
+  @apply !hidden;
+}
+.ant-popover-inner {
+  @apply overflow-hidden !p-0;
+}
