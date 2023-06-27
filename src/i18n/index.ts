@@ -8,7 +8,7 @@ const context = require.context('./locales', true, /^\.\/.*\.json$/);
 
 for (const path of context.keys()) {
   const result = path.match(/^\.\/(?<language>[^/]+)\/(?<namespace>.*?)(\/index)?\.json$/);
-  if (result?.groups != null) {
+  if (result?.groups) {
     merge(resources, { [result.groups.language]: { [result.groups.namespace]: context(path) } });
   }
 }

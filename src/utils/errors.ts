@@ -43,18 +43,12 @@ export class CancelledError extends BaseError {
 
 export enum WalletErrorCodes {
   UnknownError = 'UnknownError',
-  NotInstalled = 'NotInstalled',
   NotConnected = 'NotConnected',
   IncorrectNetwork = 'IncorrectNetwork',
-  IncompatibleVersion = 'IncompatibleVersion',
   NoAccount = 'NoAccount',
-  MismatchedAccount = 'MismatchedAccount',
-  UserRejected = 'UserRejected',
-  MalformedInput = 'MalformedInput',
-  InsufficientFunds = 'InsufficientFunds',
-  CommunicateFailed = 'CommunicateFailed',
-  RemoteRpcError = 'RemoteRpcError',
   UnsupportedNetwork = 'UnsupportedNetwork',
+  UserRejected = 'UserRejected',
+  CommunicateFailed = 'CommunicateFailed',
 }
 
 export interface WalletErrorOptions extends BaseErrorOptions {

@@ -2,18 +2,12 @@
   "errors": {
     "WalletError": {
       "UnknownError": "Unknown wallet error.",
-      "NotInstalled": "Wallet is not installed.",
       "NotConnected": "Wallet is not connected.",
-      "IncorrectNetwork": "Please switch to {{walletNetwork}} on {{walletName}} wallet.",
-      "IncompatibleVersion": "Wallet version is not compatible, please upgrade to the latest version.",
+      "IncorrectNetwork": "Please switch to correct network.",
       "NoAccount": "Wallet does not have an account.",
-      "MismatchedAccount": "Wallet current account does not match the request.",
+      "UnsupportedNetwork": "Unsupported network.",
       "UserRejected": "Request is rejected by user.",
-      "MalformedInput": "Malformed input.",
-      "InsufficientFunds": "Insufficient funds.",
-      "CommunicateFailed": "Communicate failed with wallet.",
-      "RemoteRpcError": "Communicate failed with wallet server.",
-      "UnsupportedNetwork": "Unsupported network."
+      "CommunicateFailed": "Communicate failed with wallet."
     },
     "BackendError": {
       "UnknownError": "Unknown request error.",
