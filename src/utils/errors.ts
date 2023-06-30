@@ -41,7 +41,7 @@ export class CancelledError extends BaseError {
   }
 }
 
-export enum WalletErrorCodes {
+enum WalletErrorCodes {
   UnknownError = 'UnknownError',
   NotConnected = 'NotConnected',
   IncorrectNetwork = 'IncorrectNetwork',
@@ -49,6 +49,9 @@ export enum WalletErrorCodes {
   UnsupportedNetwork = 'UnsupportedNetwork',
   UserRejected = 'UserRejected',
   CommunicateFailed = 'CommunicateFailed',
+  FailedToSwitchNetwork = 'FailedToSwitchNetwork',
+  UnpredictableGasLimit = 'UnpredictableGasLimit',
+  CallException = 'CallException',
 }
 
 export interface WalletErrorOptions extends BaseErrorOptions {
@@ -74,7 +77,7 @@ export class WalletError extends BaseError {
   }
 }
 
-export enum BackendErrorCodes {
+enum BackendErrorCodes {
   UnknownError = 'UnknownError',
   NetworkError = 'NetworkError',
   BadRequest = 'BadRequest',

@@ -3,6 +3,7 @@ import { ComponentProps, FC, useEffect } from 'react';
 import { Button } from 'app/_shared/Button';
 import { selectWalletsPopoverOpen, setWalletsPopoverOpen } from 'store/slices/ui';
 import { SUPPORTED_WALLET_IDS, WALLET_CONFIGS } from 'utils/configs';
+import { WalletId } from 'utils/enums';
 import { formatLongText } from 'utils/formatters';
 import { useSelector, useStore } from 'utils/hooks/redux';
 import { useConnect, useDisconnect, useRestoreConnection, useWeb3State } from 'utils/hooks/web3';
@@ -19,6 +20,11 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const connect = useConnect();
   const disconnect = useDisconnect();
   const restoreConnection = useRestoreConnection();
+
+  const connectWallet = async (walletId: WalletId) => {
+    await connect(walletId);
+    dispatch(setWalletsPopoverOpen(false));
+  };
 
   useEffect(() => {
     restoreConnection();
@@ -54,7 +60,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
                   key={walletId}
                   className="justify-start"
                   type="default"
-                  onClick={() => connect(walletId)}
+                  onClick={() => connectWallet(walletId)}
                 >
                   <img className="h-[16px] w-[16px]" src={WALLET_CONFIGS[walletId].icon} />
                   <div className="ml-[10px]">{WALLET_CONFIGS[walletId].name}</div>

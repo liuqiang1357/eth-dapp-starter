@@ -5,7 +5,8 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Home } from 'app/home';
 import { antdTheme } from 'utils/antdTheme';
 import { SUPPORTED_WALLET_IDS } from 'utils/configs';
-import { CONNECTIONS, Web3ContextProvider } from 'utils/web3';
+import { CONNECTIONS } from 'utils/connectors';
+import { Web3ContextProvider } from 'utils/web3';
 import { ErrorHandlder } from './ErrorHandler';
 
 export const App: FC = () => {

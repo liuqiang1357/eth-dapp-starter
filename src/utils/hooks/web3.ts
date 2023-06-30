@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useWeb3React } from '@web3-react/core';
 import { AddEthereumChainParameter } from '@web3-react/types';
 import { Contract, ContractInterface } from 'ethers';
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from 'utils/configs';
+import { CONNECTIONS, convertConnectorError } from 'utils/connectors';
 import { ChainId, WalletId } from 'utils/enums';
 import { WalletError } from 'utils/errors';
 import { useDappChainId, useLastConnectedWalletId } from 'utils/storage';
-import { CONNECTIONS, Web3Context } from 'utils/web3';
+import { Web3Context } from 'utils/web3';
 
 function useWeb3ContextValue() {
   const web3ContextValue = useContext(Web3Context);
@@ -39,53 +39,48 @@ export function useWeb3State() {
   return { walletId, chainId, walletChainId, account };
 }
 
-export function useGetProvider() {
-  const { staticProviders, walletProviderRef } = useWeb3ContextValue();
+export function useProvider() {
+  const { staticProviders, walletProvider } = useWeb3ContextValue();
   const { chainId, walletChainId } = useWeb3State();
 
-  return useCallback(async () => {
-    if (chainId === walletChainId && walletProviderRef.current) {
-      return walletProviderRef.current;
+  const provider = useMemo(() => {
+    if (chainId === walletChainId && walletProvider) {
+      return walletProvider;
     }
     return staticProviders[chainId];
-  }, [chainId, staticProviders, walletChainId, walletProviderRef]);
+  }, [chainId, staticProviders, walletChainId, walletProvider]);
+
+  return provider;
 }
 
-export function useGetSigner() {
-  const { walletProviderRef } = useWeb3ContextValue();
+export function useSigner() {
+  const { walletProvider } = useWeb3ContextValue();
   const { chainId, walletChainId, account } = useWeb3State();
 
-  return useCallback(async () => {
-    const signer = walletProviderRef.current?.getSigner();
+  const signer = useMemo(() => {
+    const signer = walletProvider?.getUncheckedSigner(account);
+    return signer != null && chainId === walletChainId && account != null ? signer : null;
+  }, [account, chainId, walletChainId, walletProvider]);
 
-    if (signer == null) {
-      throw new WalletError('Not Connected.', { code: WalletError.Codes.NotConnected });
-    }
-    if (chainId !== walletChainId) {
-      throw new WalletError('Incorrect Network.', { code: WalletError.Codes.IncorrectNetwork });
-    }
-    if (account == null) {
-      throw new WalletError('No Account.', { code: WalletError.Codes.NoAccount });
-    }
-    return signer;
-  }, [account, chainId, walletChainId, walletProviderRef]);
+  return signer;
 }
 
-export function useGetContract() {
-  const getProvider = useGetProvider();
-  const getSigner = useGetSigner();
+export function useContract<T extends Contract = Contract>(
+  address: string | null,
+  abi: ContractInterface,
+  readonly = true,
+) {
+  const provider = useProvider();
+  const signer = useSigner();
 
-  return useCallback(
-    async <T extends Contract = Contract>(
-      address: string,
-      abi: ContractInterface,
-      readonly = true,
-    ) => {
-      const providerOrSigner = readonly ? await getProvider() : await getSigner();
-      return new Contract(address, abi, providerOrSigner) as T;
-    },
-    [getProvider, getSigner],
-  );
+  const contract = useMemo(() => {
+    const signerOrProvider = readonly ? provider : signer;
+    return signerOrProvider && address != null
+      ? (new Contract(address, abi, signerOrProvider) as T)
+      : null;
+  }, [abi, address, provider, readonly, signer]);
+
+  return contract;
 }
 
 export function useConnect() {
@@ -94,7 +89,11 @@ export function useConnect() {
   return useCallback(
     async (walletId: WalletId) => {
       const connector = CONNECTIONS[walletId].connector;
-      await connector.activate();
+      try {
+        await connector.activate();
+      } catch (error) {
+        throw convertConnectorError(error);
+      }
       setLastConnectedWalletId(walletId);
     },
     [setLastConnectedWalletId],
@@ -140,8 +139,23 @@ export function useSwitchChain() {
           chainName: CHAIN_CONFIGS[chainId].name,
           nativeCurrency: CHAIN_CONFIGS[chainId].nativeCurrency,
           rpcUrls: [CHAIN_CONFIGS[chainId].rpcUrl],
+          blockExplorerUrls: [CHAIN_CONFIGS[chainId].explorerUrl],
         };
-        await connector.activate(addChainParams);
+        try {
+          try {
+            await connector.activate(addChainParams);
+          } catch (error: any) {
+            throw convertConnectorError(error);
+          }
+        } catch (error: any) {
+          if (error instanceof WalletError && error.code === WalletError.Codes.UnknownError) {
+            throw new WalletError('Switching network failed.', {
+              code: WalletError.Codes.FailedToSwitchNetwork,
+              cause: error,
+            });
+          }
+          throw error;
+        }
       }
       setDappChainId(chainId);
     },

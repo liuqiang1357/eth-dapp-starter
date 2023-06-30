@@ -32,7 +32,7 @@
     "@web3-react/core": "^8.2.0",
     "@web3-react/metamask": "^8.2.1",
     "@web3-react/types": "^8.2.0",
-    "@web3-react/walletconnect-v2": "^8.3.6",
+    "@web3-react/walletconnect-v2": "^8.3.7",
     "antd": "^5.6.3",
     "deepdash-es": "^5.3.9",
     "delay": "^6.0.0",

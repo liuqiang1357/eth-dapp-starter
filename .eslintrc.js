@@ -33,10 +33,6 @@ module.exports = {
         project: './tsconfig.json',
       },
       rules: {
-        '@typescript-eslint/explicit-module-boundary-types': [
-          'error',
-          { allowArgumentsExplicitlyTypedAsAny: true },
-        ],
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/strict-boolean-expressions': ['warn'],

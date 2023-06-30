@@ -14,15 +14,15 @@ export const Home: FC = () => {
 
   const { account } = useWeb3State();
 
-  const { data: rawBalance } = useErc20RawBalance(contractHash !== '' ? { contractHash } : null);
+  const { data: rawBalance } = useErc20RawBalance(contractHash !== '' ? contractHash : null);
 
-  const transfer = useErc20Transfer();
+  const transfer = useErc20Transfer(contractHash !== '' ? contractHash : null);
 
   const send = async () => {
-    if (contractHash !== '' && to !== '' && rawAmount !== '') {
+    if (to !== '' && rawAmount !== '') {
       try {
         setSending(true);
-        await transfer(contractHash, to, rawAmount);
+        await transfer(to, rawAmount);
       } finally {
         setSending(false);
       }

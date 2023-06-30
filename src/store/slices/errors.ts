@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { State } from 'store';
 import { createAsyncThunk } from 'utils/misc';
+import { convertMaybeEthersError } from 'utils/web3';
 
 export const errorsSlice = createSlice({
   name: 'errorsSlice',
@@ -26,14 +27,16 @@ export const registerErrorHandler = createAsyncThunk(
   async (arg, { dispatch }) => {
     window.addEventListener('error', event => {
       event.preventDefault();
-      if (event.error instanceof Error) {
-        dispatch(publishError(event.error));
+      const error = convertMaybeEthersError(event.error);
+      if (error instanceof Error) {
+        dispatch(publishError(error));
       }
     });
     window.addEventListener('unhandledrejection', event => {
       event.preventDefault();
-      if (event.reason instanceof Error) {
-        dispatch(publishError(event.reason));
+      const error = convertMaybeEthersError(event.reason);
+      if (error instanceof Error) {
+        dispatch(publishError(error));
       }
     });
   },

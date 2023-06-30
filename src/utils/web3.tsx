@@ -1,25 +1,14 @@
 import { StaticJsonRpcProvider, Web3Provider } from '@ethersproject/providers';
-import { initializeConnector, Web3ReactHooks } from '@web3-react/core';
 import { useWeb3React } from '@web3-react/core';
-import { MetaMask } from '@web3-react/metamask';
-import { AddEthereumChainParameter, Connector } from '@web3-react/types';
-import { WalletConnect } from '@web3-react/walletconnect-v2';
 import { MulticallWrapper } from 'ethers-multicall-provider';
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { createContext, FC, PropsWithChildren, useEffect, useState } from 'react';
+import { WalletError } from 'utils/errors';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS } from './configs';
-import { ChainId, WalletId } from './enums';
+import { ChainId } from './enums';
 
 export interface Web3ContextValue {
   staticProviders: Record<ChainId, StaticJsonRpcProvider>;
-  walletProviderRef: RefObject<Web3Provider | null>;
+  walletProvider: Web3Provider | null;
 }
 
 export const Web3Context = createContext<Web3ContextValue | null>(null);
@@ -36,60 +25,49 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   );
   const { connector: activeConnector, chainId } = useWeb3React();
 
-  const walletProviderRef = useRef<Web3Provider | null>(null);
+  const [walletProvider, setWalletProvider] = useState<Web3Provider | null>(null);
 
   useEffect(() => {
-    (async () => {
-      if (activeConnector.provider) {
-        walletProviderRef.current = MulticallWrapper.wrap(
-          new Web3Provider(activeConnector.provider),
-        );
-      } else {
-        walletProviderRef.current = null;
-      }
-    })();
+    if (activeConnector.provider) {
+      const provider = MulticallWrapper.wrap(new Web3Provider(activeConnector.provider));
+      setWalletProvider(provider);
+    } else {
+      setWalletProvider(null);
+    }
   }, [activeConnector, chainId]);
 
   return (
-    <Web3Context.Provider value={{ staticProviders, walletProviderRef }}>
+    <Web3Context.Provider value={{ staticProviders, walletProvider }}>
       {children}
     </Web3Context.Provider>
   );
 };
 
-const [metaMask, metaMaskHooks] = initializeConnector(actions => new MetaMask({ actions }));
-
-class WalletConnectFixed extends WalletConnect {
-  async activate(desiredChainIdOrChainParameters?: number | AddEthereumChainParameter) {
-    const desiredChainId =
-      typeof desiredChainIdOrChainParameters === 'number'
-        ? desiredChainIdOrChainParameters
-        : desiredChainIdOrChainParameters?.chainId;
-    await super.activate(desiredChainId);
+export function convertMaybeEthersError(error: any): any {
+  if (error.code === 4001) {
+    return new WalletError('Request is rejected by user.', {
+      code: WalletError.Codes.UserRejected,
+      cause: error,
+    });
   }
+  if (error.code === 'ACTION_REJECTED') {
+    return new WalletError('Request is rejected by user.', {
+      code: WalletError.Codes.UserRejected,
+      cause: error,
+    });
+  }
+  if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+    return new WalletError('Unpredictable gas limit.', {
+      code: WalletError.Codes.UnpredictableGasLimit,
+      cause: error,
+      data: { reason: error.reason },
+    });
+  }
+  if (error.code === 'CALL_EXCEPTION') {
+    return new WalletError('Transaction failed.', {
+      code: WalletError.Codes.CallException,
+      cause: error,
+    });
+  }
+  return error;
 }
-
-const [walletConnect, walletConnectHooks] = initializeConnector(
-  actions =>
-    new WalletConnectFixed({
-      options: {
-        projectId: '892908ed5f35e5a218df5bd4b4ba7828',
-        chains: [1],
-        optionalChains: SUPPORTED_CHAIN_IDS,
-        rpcMap: SUPPORTED_CHAIN_IDS.reduce(
-          (acc, cur) => ({
-            ...acc,
-            [cur]: CHAIN_CONFIGS[cur].rpcUrl,
-          }),
-          {},
-        ),
-        showQrModal: true,
-      },
-      actions,
-    }),
-);
-
-export const CONNECTIONS: Record<WalletId, { connector: Connector; hooks: Web3ReactHooks }> = {
-  [WalletId.MetaMask]: { connector: metaMask, hooks: metaMaskHooks },
-  [WalletId.WalletConnect]: { connector: walletConnect, hooks: walletConnectHooks },
-};

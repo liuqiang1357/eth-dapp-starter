@@ -7,7 +7,10 @@
       "NoAccount": "Wallet does not have an account.",
       "UnsupportedNetwork": "Unsupported network.",
       "UserRejected": "Request is rejected by user.",
-      "CommunicateFailed": "Communicate failed with wallet."
+      "CommunicateFailed": "Communicate failed with wallet.",
+      "FailedToSwitchNetwork": "Switching network failed, please operate in the wallet.",
+      "UnpredictableGasLimit": "The transaction cannot be executed due to: \"{{reason}}\"",
+      "CallException": "Transaction failed."
     },
     "BackendError": {
       "UnknownError": "Unknown request error.",
