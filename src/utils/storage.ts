@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useLocalStorage } from '@liuqiang1357/react-use-storage';
 
 export const DAPP_CHAIN_ID = 'DAPP_CHAIN_ID';

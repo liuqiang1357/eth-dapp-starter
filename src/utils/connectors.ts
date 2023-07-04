@@ -22,7 +22,7 @@ const [walletConnect, walletConnectHooks] = initializeConnector(
   actions =>
     new WalletConnectFixed({
       options: {
-        projectId: '892908ed5f35e5a218df5bd4b4ba7828',
+        projectId: '6fc6f515daaa4b001616766bc028bffa',
         chains: [1],
         optionalChains: SUPPORTED_CHAIN_IDS,
         rpcMap: SUPPORTED_CHAIN_IDS.reduce(

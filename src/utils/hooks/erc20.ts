@@ -4,12 +4,12 @@ import erc20 from 'assets/abis/ERC20.json';
 import { ERC20 } from 'assets/abis/types';
 import { useContract, useWeb3State } from './web3';
 
-export function useErc20Contract(contractHash: string | null, readonly?: boolean) {
+export function useErc20Contract(contractHash: string | null, readonly = false) {
   return useContract<ERC20>(contractHash, erc20, readonly);
 }
 
 export function useErc20RawBalance(contractHash: string | null) {
-  const contract = useErc20Contract(contractHash);
+  const contract = useErc20Contract(contractHash, true);
   const { account } = useWeb3State();
 
   return useSWR(
@@ -22,7 +22,7 @@ export function useErc20RawBalance(contractHash: string | null) {
 }
 
 export function useErc20Transfer(contractHash: string | null) {
-  const contract = useErc20Contract(contractHash, false);
+  const contract = useErc20Contract(contractHash);
 
   return useCallback(
     async (to: string, rawAmount: string) => {

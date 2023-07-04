@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import { AddEthereumChainParameter } from '@web3-react/types';
 import { Contract, ContractInterface } from 'ethers';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from 'utils/configs';
 import { CONNECTIONS, convertConnectorError } from 'utils/connectors';
 import { ChainId, WalletId } from 'utils/enums';
@@ -68,7 +68,7 @@ export function useSigner() {
 export function useContract<T extends Contract = Contract>(
   address: string | null,
   abi: ContractInterface,
-  readonly = true,
+  readonly = false,
 ) {
   const provider = useProvider();
   const signer = useSigner();
@@ -127,8 +127,12 @@ export function useRestoreConnection() {
 }
 
 export function useSwitchChain() {
-  const { walletId } = useWeb3State();
+  const { walletId, chainId } = useWeb3State();
   const { setDappChainId } = useDappChainId();
+
+  useEffect(() => {
+    setTimeout(() => setDappChainId(chainId));
+  }, [chainId, setDappChainId]);
 
   return useCallback(
     async (chainId: ChainId) => {
