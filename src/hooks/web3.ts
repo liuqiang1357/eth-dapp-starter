@@ -1,68 +1,20 @@
-import { useWeb3React } from '@web3-react/core';
 import { AddEthereumChainParameter } from '@web3-react/types';
 import { Contract, ContractInterface } from 'ethers';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from 'utils/configs';
+import { CHAIN_CONFIGS, SUPPORTED_WALLET_IDS } from 'utils/configs';
 import { CONNECTIONS, convertConnectorError } from 'utils/connectors';
 import { ChainId, WalletId } from 'utils/enums';
 import { WalletError } from 'utils/errors';
 import { useDappChainId, useLastConnectedWalletId } from 'utils/storage';
 import { Web3Context } from 'utils/web3';
 
-function useWeb3ContextValue() {
-  const web3ContextValue = useContext(Web3Context);
+export function useWeb3State() {
+  const web3State = useContext(Web3Context);
 
-  if (!web3ContextValue) {
+  if (!web3State) {
     throw new Error('Web3 hooks must be wrapped in a <Web3ContextProvider>');
   }
-  return web3ContextValue;
-}
-
-export function useWeb3State() {
-  const { connector, isActive, chainId: walletChainId, account } = useWeb3React();
-  const { dappChainId } = useDappChainId();
-
-  const walletId = isActive
-    ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTIONS[walletId].connector === connector)
-    : null;
-
-  let chainId;
-
-  if (walletChainId != null && SUPPORTED_CHAIN_IDS.includes(walletChainId)) {
-    chainId = walletChainId as ChainId;
-  } else if (dappChainId != null && SUPPORTED_CHAIN_IDS.includes(dappChainId)) {
-    chainId = dappChainId as ChainId;
-  } else {
-    chainId = SUPPORTED_CHAIN_IDS[0];
-  }
-
-  return { walletId, chainId, walletChainId, account };
-}
-
-export function useProvider() {
-  const { staticProviders, walletProvider } = useWeb3ContextValue();
-  const { chainId, walletChainId } = useWeb3State();
-
-  const provider = useMemo(() => {
-    if (chainId === walletChainId && walletProvider) {
-      return walletProvider;
-    }
-    return staticProviders[chainId];
-  }, [chainId, staticProviders, walletChainId, walletProvider]);
-
-  return provider;
-}
-
-export function useSigner() {
-  const { walletProvider } = useWeb3ContextValue();
-  const { chainId, walletChainId, account } = useWeb3State();
-
-  const signer = useMemo(() => {
-    const signer = walletProvider?.getUncheckedSigner(account);
-    return signer != null && chainId === walletChainId && account != null ? signer : null;
-  }, [account, chainId, walletChainId, walletProvider]);
-
-  return signer;
+  return web3State;
 }
 
 export function useContract<T extends Contract = Contract>(
@@ -70,8 +22,7 @@ export function useContract<T extends Contract = Contract>(
   abi: ContractInterface,
   readonly = false,
 ) {
-  const provider = useProvider();
-  const signer = useSigner();
+  const { provider, signer } = useWeb3State();
 
   const contract = useMemo(() => {
     const signerOrProvider = readonly ? provider : signer;
@@ -131,7 +82,7 @@ export function useSwitchChain() {
   const { setDappChainId } = useDappChainId();
 
   useEffect(() => {
-    setTimeout(() => setDappChainId(chainId));
+    setDappChainId(chainId);
   }, [chainId, setDappChainId]);
 
   return useCallback(
