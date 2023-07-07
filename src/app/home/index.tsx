@@ -1,8 +1,8 @@
 import { Input } from 'antd';
 import { FC, useState } from 'react';
 import { Button } from 'app/_shared/Button';
-import { useErc20RawBalance, useErc20Transfer } from 'utils/hooks/erc20';
-import { useWeb3State } from 'utils/hooks/web3';
+import { useErc20RawBalance, useErc20Transfer } from 'hooks/erc20';
+import { useWeb3State } from 'hooks/web3';
 import { Chains } from './Chains';
 import { Wallets } from './Wallets';
 

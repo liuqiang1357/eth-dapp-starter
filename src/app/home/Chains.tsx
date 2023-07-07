@@ -1,8 +1,8 @@
 import { App, Popover } from 'antd';
 import { ComponentProps, FC, useEffect } from 'react';
 import { Button } from 'app/_shared/Button';
+import { useSwitchChain, useWeb3State } from 'hooks/web3';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS } from 'utils/configs';
-import { useSwitchChain, useWeb3State } from 'utils/hooks/web3';
 import { tm } from 'utils/tailwind';
 
 export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {

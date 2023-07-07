@@ -3,9 +3,9 @@ import delay from 'delay';
 import { remove } from 'lodash-es';
 import { FC, useEffect, useRef } from 'react';
 import { usePageVisibility } from 'react-page-visibility';
+import { useDispatch, useSelector } from 'hooks/redux';
 import { clearError, registerErrorHandler, selectLastError } from 'store/slices/errors';
 import { BaseError } from 'utils/errors';
-import { useDispatch, useSelector } from 'utils/hooks/redux';
 
 export const ErrorHandlder: FC = () => {
   const recentLocalMessages = useRef<string[]>([]);
