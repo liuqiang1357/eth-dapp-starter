@@ -16,7 +16,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
     "@ethersproject/providers": "^5.7.2",
-    "@liuqiang1357/react-use-storage": "^0.5.5",
+    "@liuqiang1357/react-use-storage": "^0.5.6",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",

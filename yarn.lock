@@ -2088,10 +2088,10 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
-"@liuqiang1357/react-use-storage@^0.5.5":
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/@liuqiang1357/react-use-storage/-/react-use-storage-0.5.5.tgz#65acd332a15b164cf025bbbd7c4ab3b6d8afa20f"
-  integrity sha512-h/NwGjV+WvK5VTp3Nd47Di3ccVz4GQFReyxhMP7hqxboGDETX+RPVUZ6FpPlkMv3NgC1S4khUMrPP0tIY8RIdA==
+"@liuqiang1357/react-use-storage@^0.5.6":
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/@liuqiang1357/react-use-storage/-/react-use-storage-0.5.6.tgz#83c9d7cf3388af5079348f86063eba55e7465595"
+  integrity sha512-VZ07zVTF5REUkCfnibLWymbVr7uOlXnsW0ahIPrOEsFNBC/kymdSHc90Xb4SY2FE4oxxFfY+ZHphZ+cSWPAvdQ==
 
 "@metamask/detect-provider@^1.2.0":
   version "1.2.0"
