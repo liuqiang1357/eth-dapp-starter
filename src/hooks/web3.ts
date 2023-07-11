@@ -6,9 +6,9 @@ import { CONNECTIONS, convertConnectorError } from 'utils/connectors';
 import { ChainId, WalletId } from 'utils/enums';
 import { WalletError } from 'utils/errors';
 import { useDappChainId, useLastConnectedWalletId } from 'utils/storage';
-import { Web3Context } from 'utils/web3';
+import { Web3Context, Web3ContextValue } from 'utils/web3';
 
-export function useWeb3State() {
+export function useWeb3State(): Web3ContextValue {
   const web3State = useContext(Web3Context);
 
   if (!web3State) {
@@ -21,7 +21,7 @@ export function useContract<T extends Contract = Contract>(
   address: string | null,
   abi: ContractInterface,
   readonly = false,
-) {
+): T | null {
   const { provider, signer } = useWeb3State();
 
   const contract = useMemo(() => {
@@ -34,7 +34,7 @@ export function useContract<T extends Contract = Contract>(
   return contract;
 }
 
-export function useConnect() {
+export function useConnect(): (walletId: WalletId) => Promise<void> {
   const { setLastConnectedWalletId } = useLastConnectedWalletId();
 
   return useCallback(
@@ -51,7 +51,7 @@ export function useConnect() {
   );
 }
 
-export function useDisconnect() {
+export function useDisconnect(): () => Promise<void> {
   const { walletId } = useWeb3State();
   const { setLastConnectedWalletId } = useLastConnectedWalletId();
 
@@ -65,7 +65,7 @@ export function useDisconnect() {
   }, [setLastConnectedWalletId, walletId]);
 }
 
-export function useRestoreConnection() {
+export function useRestoreConnection(): () => void {
   const { lastConnectedWalletId } = useLastConnectedWalletId();
 
   return useCallback(() => {
@@ -77,7 +77,7 @@ export function useRestoreConnection() {
   }, [lastConnectedWalletId]);
 }
 
-export function useSwitchChain() {
+export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
   const { walletId, chainId } = useWeb3State();
   const { setDappChainId } = useDappChainId();
 
