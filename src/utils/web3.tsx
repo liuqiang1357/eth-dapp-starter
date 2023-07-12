@@ -36,12 +36,13 @@ const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
   );
   const [walletProvider, setWalletProvider] = useState<Web3Provider | null>(null);
 
-  const { connector, isActive, chainId: walletChainId, account } = useWeb3React();
+  const { connector, isActive, chainId: originWalletChainId, account } = useWeb3React();
   const { dappChainId } = useDappChainId();
 
   const walletId = isActive
     ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTIONS[walletId].connector === connector)
     : null;
+  const walletChainId = isActive ? originWalletChainId : null;
 
   let chainId: ChainId;
 
