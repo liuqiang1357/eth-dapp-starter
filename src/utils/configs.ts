@@ -10,16 +10,10 @@ export const CHAIN_CONFIGS: Record<ChainId, ChainConfig> = {
   [ChainId.PolygonMumbai]: {
     name: 'Polygon Mumbai',
     icon: polygon,
-    nativeCurrency: { name: 'Polygon Mumbai Matic', symbol: 'mMATIC', decimals: 18 },
-    rpcUrl: 'https://endpoints.omniatech.io/v1/matic/mumbai/public',
-    explorerUrl: 'https://mumbai.polygonscan.com',
   },
   [ChainId.ArbitrumOne]: {
     name: 'Arbitrum',
     icon: arbitrum,
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
-    rpcUrl: 'https://arb1.arbitrum.io/rpc',
-    explorerUrl: 'https://arbiscan.io',
   },
 };
 

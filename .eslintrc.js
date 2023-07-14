@@ -42,5 +42,11 @@ module.exports = {
         '@typescript-eslint/strict-boolean-expressions': ['warn'],
       },
     },
+    {
+      files: ['**/hooks/*.ts?(x)'],
+      rules: {
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+      },
+    },
   ],
 };

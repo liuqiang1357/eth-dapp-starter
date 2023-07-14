@@ -1,19 +1,14 @@
 {
   "errors": {
     "WalletError": {
-      "UnknownError": "Unknown wallet error.",
       "NotConnected": "Wallet is not connected.",
+      "CommunicateFailed": "Communicate failed with wallet.",
       "IncorrectNetwork": "Please switch to correct network.",
       "NoAccount": "Wallet does not have an account.",
-      "UnsupportedNetwork": "Unsupported network.",
       "UserRejected": "Request is rejected by user.",
-      "CommunicateFailed": "Communicate failed with wallet.",
-      "FailedToSwitchNetwork": "Switching network failed, please operate in the wallet.",
-      "UnpredictableGasLimit": "The transaction cannot be executed due to: \"{{reason}}\"",
-      "CallException": "Transaction failed."
+      "FailedToSwitchNetwork": "Switching network failed, please operate in the wallet."
     },
     "BackendError": {
-      "UnknownError": "Unknown request error.",
       "NetworkError": "Network error.",
       "InternalServiceError": "Internal server error.",
       "NotFound": "Not found."

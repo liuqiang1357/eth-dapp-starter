@@ -1,51 +1,84 @@
+import { useQuery } from '@tanstack/react-query';
+import { arbitrum, Chain, mainnet, polygonMumbai } from '@wagmi/chains';
+import { Connector } from '@wagmi/connectors';
+import { InjectedConnector } from '@wagmi/connectors/injected';
+import { WalletConnectConnector } from '@wagmi/connectors/walletConnect';
 import {
-  JsonRpcProvider,
-  JsonRpcSigner,
-  StaticJsonRpcProvider,
-  Web3Provider,
-} from '@ethersproject/providers';
-import { useWeb3React, Web3ReactProvider } from '@web3-react/core';
-import { MulticallWrapper } from 'ethers-multicall-provider';
+  Address,
+  configureChains,
+  createConfig,
+  getAccount,
+  getNetwork,
+  getPublicClient,
+  getWalletClient,
+  PublicClient,
+  WalletClient,
+  watchAccount,
+  watchNetwork,
+} from '@wagmi/core';
+import { publicProvider } from '@wagmi/core/providers/public';
 import { createContext, FC, PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import { WalletError } from 'utils/errors';
-import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from './configs';
-import { CONNECTIONS } from './connectors';
+import { UserRejectedRequestError, BaseError as ViemBaseError } from 'viem';
+import { SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from './configs';
 import { ChainId, WalletId } from './enums';
+import { WalletError } from './errors';
 import { useDappChainId } from './storage';
 
-export interface Web3ContextValue {
+export const CHAINS: Record<ChainId, Chain> = {
+  [ChainId.PolygonMumbai]: polygonMumbai,
+  [ChainId.ArbitrumOne]: arbitrum,
+};
+
+export const CONNECTORS: Record<WalletId, Connector> = {
+  [WalletId.MetaMask]: new InjectedConnector({
+    chains: SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId]),
+    options: { shimDisconnect: true },
+  }),
+  [WalletId.WalletConnect]: new WalletConnectConnector({
+    chains: [mainnet, ...SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId])],
+    options: { projectId: '6fc6f515daaa4b001616766bc028bffa' },
+  }),
+};
+
+const { publicClient, webSocketPublicClient } = configureChains(
+  SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId]),
+  [publicProvider()],
+);
+
+createConfig({
+  publicClient,
+  webSocketPublicClient,
+  connectors: SUPPORTED_WALLET_IDS.map(walletId => CONNECTORS[walletId]),
+  autoConnect: true,
+});
+
+export interface Web3StateContextValue {
   walletId: WalletId | null;
-  chainId: ChainId;
   walletChainId: number | null;
-  account: string | null;
-  provider: JsonRpcProvider;
-  signer: JsonRpcSigner | null;
+  chainId: ChainId;
+  account: Address | null;
+  publicClient: PublicClient;
+  walletClient: WalletClient | null;
 }
 
-export const Web3Context = createContext<Web3ContextValue | null>(null);
+export const Web3StateContext = createContext<Web3StateContextValue | null>(null);
 
-const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [staticProviders] = useState(() =>
-    SUPPORTED_CHAIN_IDS.reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur]: MulticallWrapper.wrap(new StaticJsonRpcProvider(CHAIN_CONFIGS[cur].rpcUrl)),
-      }),
-      {} as Record<ChainId, StaticJsonRpcProvider>,
-    ),
-  );
-  const [walletProvider, setWalletProvider] = useState<Web3Provider | null>(null);
+export const Web3StateProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [account, setAccount] = useState(getAccount);
+  useEffect(() => watchAccount(setAccount), []);
 
-  const { connector, isActive, chainId: originWalletChainId, account } = useWeb3React();
+  const [network, setNetwork] = useState(getNetwork);
+  useEffect(() => watchNetwork(setNetwork), []);
+
+  const walletId = account.isConnected
+    ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTORS[walletId] === account.connector)
+    : null;
+  const walletChainId = account.isConnected ? network.chain?.id : null;
+  const address = account.address != null ? (account.address.toLowerCase() as Address) : null;
+
   const { dappChainId } = useDappChainId();
 
-  const walletId = isActive
-    ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTIONS[walletId].connector === connector)
-    : null;
-  const walletChainId = isActive ? originWalletChainId : null;
-
   let chainId: ChainId;
-
   if (walletChainId != null && SUPPORTED_CHAIN_IDS.includes(walletChainId)) {
     chainId = walletChainId as ChainId;
   } else if (dappChainId != null && SUPPORTED_CHAIN_IDS.includes(dappChainId)) {
@@ -54,79 +87,45 @@ const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
     chainId = SUPPORTED_CHAIN_IDS[0];
   }
 
-  const provider = useMemo(() => {
-    if (chainId === walletChainId && walletProvider) {
-      return walletProvider;
-    }
-    return staticProviders[chainId];
-  }, [chainId, staticProviders, walletChainId, walletProvider]);
+  const publicClient = useMemo(() => getPublicClient({ chainId }), [chainId]);
 
-  const signer = useMemo(() => {
-    const signer = walletProvider?.getUncheckedSigner(account);
-    return signer != null && chainId === walletChainId && account != null ? signer : null;
-  }, [account, chainId, walletChainId, walletProvider]);
-
-  useEffect(() => {
-    if (connector.provider) {
-      const provider = MulticallWrapper.wrap(new Web3Provider(connector.provider));
-      setWalletProvider(provider);
-    } else {
-      setWalletProvider(null);
-    }
-  }, [connector, walletChainId]);
+  const { data: walletClient } = useQuery({
+    queryKey: ['walletClient', { chainId }] as const,
+    queryFn: ({ queryKey: [, { chainId }] }) => getWalletClient({ chainId }),
+  });
 
   return (
-    <Web3Context.Provider
+    <Web3StateContext.Provider
       value={{
         walletId: walletId ?? null,
-        chainId,
         walletChainId: walletChainId ?? null,
-        account: account?.toLowerCase() ?? null,
-        provider,
-        signer: signer ?? null,
+        chainId,
+        account: address ?? null,
+        publicClient,
+        walletClient: walletClient ?? null,
       }}
     >
       {children}
-    </Web3Context.Provider>
+    </Web3StateContext.Provider>
   );
 };
 
-export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  return (
-    <Web3ReactProvider
-      connectors={SUPPORTED_WALLET_IDS.map(walletId => CONNECTIONS[walletId]).map(connection => [
-        connection.connector,
-        connection.hooks,
-      ])}
-    >
-      <Web3ContextInnerProvider>{children}</Web3ContextInnerProvider>
-    </Web3ReactProvider>
-  );
-};
-
-export function convertMaybeEthersError(error: any): any {
-  if (error.code === 4001) {
-    return new WalletError('Request is rejected by user.', {
-      code: WalletError.Codes.UserRejected,
-      cause: error,
-    });
-  }
-  if (error.code === 'ACTION_REJECTED') {
-    return new WalletError('Request is rejected by user.', {
-      code: WalletError.Codes.UserRejected,
-      cause: error,
-    });
-  }
-  if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
-    return new WalletError('Unpredictable gas limit.', {
-      code: WalletError.Codes.UnpredictableGasLimit,
-      cause: error,
-      data: { reason: error.reason },
-    });
-  }
-  if (error.code === 'CALL_EXCEPTION') {
-    return new WalletError('Transaction failed.', {
-      code: WalletError.Codes.CallException,
+export function convertMaybeWeb3Error(error: any): any {
+  if (error instanceof ViemBaseError) {
+    if (error instanceof UserRejectedRequestError) {
+      return new WalletError(error.shortMessage, {
+        code: WalletError.Codes.UserRejected,
+        cause: error,
+      });
+    }
+    if (error.cause instanceof UserRejectedRequestError) {
+      return new WalletError(error.cause.shortMessage, {
+        code: WalletError.Codes.UserRejected,
+        cause: error.cause,
+      });
+    }
+    return new WalletError(error.shortMessage, {
+      code: WalletError.Codes.UnknownError,
       cause: error,
     });
   }

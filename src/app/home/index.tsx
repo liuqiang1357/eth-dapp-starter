@@ -1,5 +1,6 @@
 import { Input } from 'antd';
 import { FC, useState } from 'react';
+import { isAddress } from 'viem';
 import { Button } from 'app/_shared/Button';
 import { useErc20RawBalance, useErc20Transfer } from 'hooks/erc20';
 import { useWeb3State } from 'hooks/web3';
@@ -7,22 +8,22 @@ import { Chains } from './Chains';
 import { Wallets } from './Wallets';
 
 export const Home: FC = () => {
-  const [contractHash, setContractHash] = useState('');
+  const [address, setAddress] = useState('');
   const [to, setTo] = useState('');
   const [rawAmount, setRawAmount] = useState('');
   const [sending, setSending] = useState(false);
 
   const { account } = useWeb3State();
 
-  const { data: rawBalance } = useErc20RawBalance(contractHash !== '' ? contractHash : null);
+  const { data: rawBalance } = useErc20RawBalance(isAddress(address) ? address : null);
 
-  const transfer = useErc20Transfer(contractHash !== '' ? contractHash : null);
+  const { mutateAsync: transfer } = useErc20Transfer();
 
   const send = async () => {
-    if (to !== '' && rawAmount !== '') {
+    if (isAddress(address) && isAddress(to) && rawAmount !== '') {
       try {
         setSending(true);
-        await transfer(to, rawAmount);
+        await transfer({ address, to, rawAmount });
       } finally {
         setSending(false);
       }
@@ -41,13 +42,13 @@ export const Home: FC = () => {
 
       <div className="flex w-[600px] flex-col space-y-[20px] px-[40px]">
         <div className="flex items-center">
-          <div>Address:</div>
+          <div>Account:</div>
           <div className="ml-[10px]">{account}</div>
         </div>
         <Input
           placeholder="ERC20 contract hash"
-          value={contractHash}
-          onChange={event => setContractHash(event.target.value)}
+          value={address}
+          onChange={event => setAddress(event.target.value)}
         />
         <div className="flex items-center">
           <div>Raw balance:</div>

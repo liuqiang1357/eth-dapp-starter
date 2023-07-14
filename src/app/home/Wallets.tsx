@@ -1,13 +1,15 @@
+import { connect, disconnect } from '@wagmi/core';
 import { Popover } from 'antd';
-import { ComponentProps, FC, useEffect } from 'react';
+import { ComponentProps, FC } from 'react';
 import { Button } from 'app/_shared/Button';
 import { useSelector, useStore } from 'hooks/redux';
-import { useConnect, useDisconnect, useRestoreConnection, useWeb3State } from 'hooks/web3';
+import { useWeb3State } from 'hooks/web3';
 import { selectWalletsPopoverOpen, setWalletsPopoverOpen } from 'store/slices/ui';
 import { SUPPORTED_WALLET_IDS, WALLET_CONFIGS } from 'utils/configs';
 import { WalletId } from 'utils/enums';
 import { formatLongText } from 'utils/formatters';
 import { tm } from 'utils/tailwind';
+import { CONNECTORS } from 'utils/web3';
 import disconnectImage from './_images/disconnect.svg';
 
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
@@ -17,18 +19,10 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
 
   const { dispatch } = useStore();
 
-  const connect = useConnect();
-  const disconnect = useDisconnect();
-  const restoreConnection = useRestoreConnection();
-
   const connectWallet = async (walletId: WalletId) => {
-    await connect(walletId);
+    await connect({ connector: CONNECTORS[walletId] });
     dispatch(setWalletsPopoverOpen(false));
   };
-
-  useEffect(() => {
-    restoreConnection();
-  }, [restoreConnection]);
 
   return (
     <div className={tm('inline-block', className)} {...rest}>

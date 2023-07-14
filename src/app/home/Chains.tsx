@@ -7,6 +7,7 @@ import { tm } from 'utils/tailwind';
 
 export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { chainId, walletChainId } = useWeb3State();
+
   const switchChain = useSwitchChain();
 
   const { message } = App.useApp();
