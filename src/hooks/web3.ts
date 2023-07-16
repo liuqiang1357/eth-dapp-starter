@@ -6,13 +6,13 @@ import { CONNECTIONS, convertConnectorError } from 'utils/connectors';
 import { ChainId, WalletId } from 'utils/enums';
 import { WalletError } from 'utils/errors';
 import { useDappChainId, useLastConnectedWalletId } from 'utils/storage';
-import { Web3Context, Web3ContextValue } from 'utils/web3';
+import { Web3StateContext, Web3StateContextValue } from 'utils/web3';
 
-export function useWeb3State(): Web3ContextValue {
-  const web3State = useContext(Web3Context);
+export function useWeb3State(): Web3StateContextValue {
+  const web3State = useContext(Web3StateContext);
 
   if (!web3State) {
-    throw new Error('Web3 hooks must be wrapped in a <Web3ContextProvider>');
+    throw new Error('Web3 hooks must be wrapped in a <Web3StateProvider>');
   }
   return web3State;
 }

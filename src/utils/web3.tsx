@@ -6,14 +6,14 @@ import {
 } from '@ethersproject/providers';
 import { useWeb3React, Web3ReactProvider } from '@web3-react/core';
 import { MulticallWrapper } from 'ethers-multicall-provider';
-import { createContext, FC, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { createContext, FC, PropsWithChildren, useMemo, useState } from 'react';
 import { WalletError } from 'utils/errors';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from './configs';
 import { CONNECTIONS } from './connectors';
 import { ChainId, WalletId } from './enums';
 import { useDappChainId } from './storage';
 
-export interface Web3ContextValue {
+export interface Web3StateContextValue {
   walletId: WalletId | null;
   chainId: ChainId;
   walletChainId: number | null;
@@ -22,20 +22,9 @@ export interface Web3ContextValue {
   signer: JsonRpcSigner | null;
 }
 
-export const Web3Context = createContext<Web3ContextValue | null>(null);
+export const Web3StateContext = createContext<Web3StateContextValue | null>(null);
 
 const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [staticProviders] = useState(() =>
-    SUPPORTED_CHAIN_IDS.reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur]: MulticallWrapper.wrap(new StaticJsonRpcProvider(CHAIN_CONFIGS[cur].rpcUrl)),
-      }),
-      {} as Record<ChainId, StaticJsonRpcProvider>,
-    ),
-  );
-  const [walletProvider, setWalletProvider] = useState<Web3Provider | null>(null);
-
   const { connector, isActive, chainId: originWalletChainId, account } = useWeb3React();
   const { dappChainId } = useDappChainId();
 
@@ -54,29 +43,38 @@ const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
     chainId = SUPPORTED_CHAIN_IDS[0];
   }
 
+  const [staticProviders] = useState(() =>
+    SUPPORTED_CHAIN_IDS.reduce(
+      (acc, cur) => ({
+        ...acc,
+        [cur]: MulticallWrapper.wrap(new StaticJsonRpcProvider(CHAIN_CONFIGS[cur].rpcUrl)),
+      }),
+      {} as Record<ChainId, StaticJsonRpcProvider>,
+    ),
+  );
+
+  const walletProvider = useMemo(() => {
+    if (connector.provider && chainId === walletChainId) {
+      return MulticallWrapper.wrap(new Web3Provider(connector.provider));
+    } else {
+      return null;
+    }
+  }, [connector.provider, chainId, walletChainId]);
+
   const provider = useMemo(() => {
-    if (chainId === walletChainId && walletProvider) {
+    if (walletProvider) {
       return walletProvider;
     }
     return staticProviders[chainId];
-  }, [chainId, staticProviders, walletChainId, walletProvider]);
+  }, [chainId, staticProviders, walletProvider]);
 
   const signer = useMemo(() => {
     const signer = walletProvider?.getUncheckedSigner(account);
-    return signer != null && chainId === walletChainId && account != null ? signer : null;
-  }, [account, chainId, walletChainId, walletProvider]);
-
-  useEffect(() => {
-    if (connector.provider) {
-      const provider = MulticallWrapper.wrap(new Web3Provider(connector.provider));
-      setWalletProvider(provider);
-    } else {
-      setWalletProvider(null);
-    }
-  }, [connector, walletChainId]);
+    return signer != null && account != null ? signer : null;
+  }, [account, walletProvider]);
 
   return (
-    <Web3Context.Provider
+    <Web3StateContext.Provider
       value={{
         walletId: walletId ?? null,
         chainId,
@@ -87,11 +85,11 @@ const Web3ContextInnerProvider: FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
-    </Web3Context.Provider>
+    </Web3StateContext.Provider>
   );
 };
 
-export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
+export const Web3StateProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <Web3ReactProvider
       connectors={SUPPORTED_WALLET_IDS.map(walletId => CONNECTIONS[walletId]).map(connection => [
@@ -104,7 +102,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export function convertMaybeEthersError(error: any): any {
+export function convertMaybeWeb3Error(error: any): any {
   if (error.code === 4001) {
     return new WalletError('Request is rejected by user.', {
       code: WalletError.Codes.UserRejected,

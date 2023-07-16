@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { State } from 'store';
 import { createAsyncThunk } from 'utils/misc';
-import { convertMaybeEthersError } from 'utils/web3';
+import { convertMaybeWeb3Error } from 'utils/web3';
 
 export const errorsSlice = createSlice({
   name: 'errorsSlice',
@@ -9,8 +9,11 @@ export const errorsSlice = createSlice({
     lastError: null as Error | null,
   },
   reducers: {
-    publishError: (state, action: PayloadAction<Error>) => {
-      state.lastError = action.payload;
+    publishError: (state, action: PayloadAction<unknown>) => {
+      const error = convertMaybeWeb3Error(action.payload);
+      if (error instanceof Error) {
+        state.lastError = error;
+      }
     },
     clearError: (state, action: PayloadAction<Error>) => {
       if (state.lastError === action.payload) {
@@ -27,17 +30,11 @@ export const registerErrorHandler = createAsyncThunk(
   async (arg, { dispatch }) => {
     window.addEventListener('error', event => {
       event.preventDefault();
-      const error = convertMaybeEthersError(event.error);
-      if (error instanceof Error) {
-        dispatch(publishError(error));
-      }
+      dispatch(publishError(event.error));
     });
     window.addEventListener('unhandledrejection', event => {
       event.preventDefault();
-      const error = convertMaybeEthersError(event.reason);
-      if (error instanceof Error) {
-        dispatch(publishError(error));
-      }
+      dispatch(publishError(event.reason));
     });
   },
 );

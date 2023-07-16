@@ -44,11 +44,10 @@ export class CancelledError extends BaseError {
 enum WalletErrorCodes {
   UnknownError = 'UnknownError',
   NotConnected = 'NotConnected',
+  CommunicateFailed = 'CommunicateFailed',
   IncorrectNetwork = 'IncorrectNetwork',
   NoAccount = 'NoAccount',
-  UnsupportedNetwork = 'UnsupportedNetwork',
   UserRejected = 'UserRejected',
-  CommunicateFailed = 'CommunicateFailed',
   FailedToSwitchNetwork = 'FailedToSwitchNetwork',
   UnpredictableGasLimit = 'UnpredictableGasLimit',
   CallException = 'CallException',
