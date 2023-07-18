@@ -35,7 +35,7 @@ export const CONNECTORS: Record<WalletId, Connector> = {
   }),
 };
 
-export function convertMaybeWeb3Error(error: any): any {
+export function convertMaybeViemError(error: unknown): unknown {
   if (error instanceof ViemBaseError) {
     if (error instanceof UserRejectedRequestError) {
       return new WalletError(error.shortMessage, {

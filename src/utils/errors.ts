@@ -1,14 +1,14 @@
 import i18n from 'i18next';
 
 export interface BaseErrorOptions {
-  cause?: any;
-  data?: Record<string, any>;
+  cause?: unknown;
+  data?: Record<string, unknown>;
   expose?: boolean;
 }
 
 export class BaseError extends Error {
-  cause: any;
-  data: Record<string, any>;
+  cause: unknown;
+  data: Record<string, unknown>;
   expose: boolean;
 
   constructor(message?: string, options: BaseErrorOptions = {}) {

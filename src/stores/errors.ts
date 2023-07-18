@@ -1,12 +1,12 @@
 import { createStore } from '@udecode/zustood';
-import { convertMaybeWeb3Error } from 'utils/web3';
+import { convertMaybeViemError } from 'utils/web3';
 
 export const errorsStore = createStore('errors')({
   lastError: null as Error | null,
 })
   .extendActions((set, get) => ({
     publishError: (error: unknown) => {
-      const finalError = convertMaybeWeb3Error(error);
+      const finalError = convertMaybeViemError(error);
       if (finalError instanceof Error) {
         set.lastError(finalError);
       }

@@ -1,6 +1,6 @@
 import { extendTailwindMerge } from 'tailwind-merge';
 
-export function tw(strings: TemplateStringsArray, ...keys: any[]): string {
+export function tw(strings: TemplateStringsArray, ...keys: unknown[]): string {
   return keys.reduce((acc, key, i) => acc + strings[i] + key, '') + strings[keys.length];
 }
 
