@@ -30,7 +30,7 @@ export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
   const { walletId, chainId } = useWeb3State();
 
   useEffect(() => {
-    settingsStore.set.setDappChainId(chainId);
+    settingsStore.set.dappChainId(chainId);
   }, [chainId]);
 
   return useCallback(
@@ -45,7 +45,7 @@ export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
           });
         }
       }
-      settingsStore.set.setDappChainId(chainId);
+      settingsStore.set.dappChainId(chainId);
     },
     [walletId],
   );

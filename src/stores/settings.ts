@@ -1,7 +1,6 @@
 import { createStore } from '@udecode/zustood';
 import { produce } from 'immer';
 import { SUPPORTED_CHAIN_IDS } from 'utils/configs';
-import { ChainId } from 'utils/models';
 
 export const settingsStore = createStore('settings')(
   {
@@ -15,15 +14,13 @@ export const settingsStore = createStore('settings')(
           ...currentState,
           ...persistedState,
         };
-        return produce(mergedState, mergedState => {
+        return produce(mergedState, draft => {
           const { dappChainId } = persistedState ?? {};
           if (dappChainId == null || !SUPPORTED_CHAIN_IDS.includes(dappChainId)) {
-            mergedState.dappChainId = currentState.dappChainId;
+            draft.dappChainId = currentState.dappChainId;
           }
         });
       },
     },
   },
-).extendActions(set => ({
-  setDappChainId: (chainId: ChainId) => set.dappChainId(chainId),
-}));
+);

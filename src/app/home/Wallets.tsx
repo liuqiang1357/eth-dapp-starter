@@ -19,7 +19,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
 
   const connectWallet = async (walletId: WalletId) => {
     await connect({ connector: CONNECTORS[walletId] });
-    uiStore.set.setWalletsPopoverOpen(false);
+    uiStore.set.walletsPopoverOpen(false);
   };
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
       ) : (
         <Popover
           open={walletsPopoverOpen}
-          onOpenChange={open => uiStore.set.setWalletsPopoverOpen(open)}
+          onOpenChange={open => uiStore.set.walletsPopoverOpen(open)}
           trigger="click"
           content={
             <div className="flex min-w-[180px] flex-col space-y-[10px] p-[20px]">
