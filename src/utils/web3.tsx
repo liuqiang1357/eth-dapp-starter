@@ -19,6 +19,7 @@ import { ChainId, WalletId } from './models';
 export const CHAINS: Record<ChainId, Chain> = {
   [ChainId.PolygonMumbai]: produce(polygonMumbai, draft => {
     draft.rpcUrls.public.http = ['https://rpc.ankr.com/polygon_mumbai'] as any;
+    draft.rpcUrls.default.http = ['https://rpc.ankr.com/polygon_mumbai'] as any;
   }),
   [ChainId.ArbitrumOne]: arbitrum,
 };
