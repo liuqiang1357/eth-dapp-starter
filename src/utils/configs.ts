@@ -2,8 +2,7 @@ import arbitrum from 'assets/images/chains/arbitrum.svg';
 import polygon from 'assets/images/chains/polygon.svg';
 import metaMask from 'assets/images/wallets/metaMask.png';
 import walletConnnect from 'assets/images/wallets/walletConnect.svg';
-import { ChainId, WalletId } from './enums';
-import { ChainConfig, WalletConfig } from './types';
+import { ChainConfig, ChainId, WalletConfig, WalletId } from './models';
 
 // Chain configs
 export const CHAIN_CONFIGS: Record<ChainId, ChainConfig> = {

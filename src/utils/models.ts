@@ -3,7 +3,17 @@ export enum ChainId {
   PolygonMumbai = 80001,
 }
 
+export interface ChainConfig {
+  name: string;
+  icon: string;
+}
+
 export enum WalletId {
   MetaMask = 'MetaMask',
   WalletConnect = 'WalletConnect',
+}
+
+export interface WalletConfig {
+  name: string;
+  icon: string;
 }

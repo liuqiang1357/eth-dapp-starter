@@ -1,25 +1,37 @@
-import { useCallback, useContext, useEffect } from 'react';
-import { ChainId } from 'utils/enums';
+import { useCallback, useEffect } from 'react';
+import { Address } from 'viem';
+import { settingsStore } from 'stores/settings';
+import { web3Store } from 'stores/web3';
+import { SUPPORTED_CHAIN_IDS } from 'utils/configs';
 import { WalletError } from 'utils/errors';
-import { useDappChainId } from 'utils/storage';
-import { CONNECTORS, Web3StateContext, Web3StateContextValue } from 'utils/web3';
+import { ChainId, WalletId } from 'utils/models';
+import { CONNECTORS } from 'utils/web3';
 
-export function useWeb3State(): Web3StateContextValue {
-  const web3State = useContext(Web3StateContext);
+export function useWeb3State(): {
+  walletId: WalletId | null;
+  walletChainId: number | null;
+  chainId: ChainId;
+  account: Address | null;
+} {
+  const { walletId, walletChainId, account } = web3Store.useStore();
+  const dappChainId = settingsStore.use.dappChainId();
 
-  if (!web3State) {
-    throw new Error('Web3 hooks must be wrapped in a <Web3StateProvider>');
+  let chainId: ChainId;
+  if (walletChainId != null && SUPPORTED_CHAIN_IDS.includes(walletChainId)) {
+    chainId = walletChainId as ChainId;
+  } else {
+    chainId = dappChainId;
   }
-  return web3State;
+
+  return { walletId, walletChainId, chainId, account };
 }
 
 export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
   const { walletId, chainId } = useWeb3State();
-  const { setDappChainId } = useDappChainId();
 
   useEffect(() => {
-    setDappChainId(chainId);
-  }, [chainId, setDappChainId]);
+    settingsStore.set.setDappChainId(chainId);
+  }, [chainId]);
 
   return useCallback(
     async (chainId: ChainId) => {
@@ -33,8 +45,8 @@ export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
           });
         }
       }
-      setDappChainId(chainId);
+      settingsStore.set.setDappChainId(chainId);
     },
-    [setDappChainId, walletId],
+    [walletId],
   );
 }

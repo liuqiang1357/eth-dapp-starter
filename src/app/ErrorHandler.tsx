@@ -3,22 +3,17 @@ import delay from 'delay';
 import { remove } from 'lodash-es';
 import { FC, useEffect, useRef } from 'react';
 import { usePageVisibility } from 'react-page-visibility';
-import { useDispatch, useSelector } from 'hooks/redux';
-import { clearError, registerErrorHandler, selectLastError } from 'store/slices/errors';
+import { errorsStore } from 'stores/errors';
 import { BaseError } from 'utils/errors';
 
 export const ErrorHandlder: FC = () => {
   const recentLocalMessages = useRef<string[]>([]);
 
-  const error = useSelector(selectLastError);
-
-  const dispatch = useDispatch();
+  const error = errorsStore.use.lastError();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(registerErrorHandler()).unwrap();
-    })();
-  }, [dispatch]);
+    errorsStore.set.registerListeners();
+  }, []);
 
   const pageVisible = usePageVisibility();
 
@@ -27,7 +22,7 @@ export const ErrorHandlder: FC = () => {
   useEffect(() => {
     setTimeout(async () => {
       if (error) {
-        dispatch(clearError(error));
+        errorsStore.set.clearError(error);
         if (error instanceof BaseError) {
           if (error.expose) {
             const localMessage = error.getLocalMessage();
@@ -46,7 +41,7 @@ export const ErrorHandlder: FC = () => {
         console.error(error);
       }
     });
-  }, [dispatch, error, message, pageVisible]);
+  }, [error, message, pageVisible]);
 
   return <></>;
 };
