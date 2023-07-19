@@ -1,36 +1,20 @@
 import { useCallback, useEffect } from 'react';
-import { Address } from 'viem';
-import { settingsStore } from 'stores/settings';
-import { web3Store } from 'stores/web3';
-import { SUPPORTED_CHAIN_IDS } from 'utils/configs';
+import { useSnapshot } from 'valtio';
+import { settingsState } from 'states/settings';
+import { web3State } from 'states/web3';
 import { WalletError } from 'utils/errors';
-import { ChainId, WalletId } from 'utils/models';
+import { ChainId } from 'utils/models';
 import { CONNECTORS } from 'utils/web3';
 
-export function useWeb3State(): {
-  walletId: WalletId | null;
-  walletChainId: number | null;
-  chainId: ChainId;
-  account: Address | null;
-} {
-  const { walletId, walletChainId, account } = web3Store.useStore();
-  const dappChainId = settingsStore.use.dappChainId();
-
-  let chainId: ChainId;
-  if (walletChainId != null && SUPPORTED_CHAIN_IDS.includes(walletChainId)) {
-    chainId = walletChainId as ChainId;
-  } else {
-    chainId = dappChainId;
-  }
-
-  return { walletId, walletChainId, chainId, account };
+export function useWeb3State() {
+  return useSnapshot(web3State);
 }
 
-export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
+export function useSwitchChain() {
   const { walletId, chainId } = useWeb3State();
 
   useEffect(() => {
-    settingsStore.set.dappChainId(chainId);
+    settingsState.dappChainId = chainId;
   }, [chainId]);
 
   return useCallback(
@@ -45,7 +29,7 @@ export function useSwitchChain(): (chainId: ChainId) => Promise<void> {
           });
         }
       }
-      settingsStore.set.dappChainId(chainId);
+      settingsState.dappChainId = chainId;
     },
     [walletId],
   );

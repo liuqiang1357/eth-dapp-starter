@@ -2,16 +2,10 @@ import { arbitrum, Chain, mainnet, polygonMumbai } from '@wagmi/chains';
 import { Connector } from '@wagmi/connectors';
 import { InjectedConnector } from '@wagmi/connectors/injected';
 import { WalletConnectConnector } from '@wagmi/connectors/walletConnect';
-import {
-  Config,
-  configureChains,
-  createConfig,
-  PublicClient,
-  WebSocketPublicClient,
-} from '@wagmi/core';
+import { configureChains, createConfig } from '@wagmi/core';
 import { publicProvider } from '@wagmi/core/providers/public';
 import { produce } from 'immer';
-import { FallbackTransport, UserRejectedRequestError, BaseError as ViemBaseError } from 'viem';
+import { UserRejectedRequestError, BaseError as ViemBaseError } from 'viem';
 import { SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from './configs';
 import { WalletError } from './errors';
 import { ChainId, WalletId } from './models';
@@ -57,21 +51,14 @@ export function convertMaybeViemError(error: unknown): unknown {
   return error;
 }
 
-export function createWagmiConfig(): Config<
-  PublicClient<FallbackTransport>,
-  WebSocketPublicClient<FallbackTransport>
-> {
-  const { publicClient, webSocketPublicClient } = configureChains(
-    SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId]),
-    [publicProvider()],
-  );
+const { publicClient, webSocketPublicClient } = configureChains(
+  SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId]),
+  [publicProvider()],
+);
 
-  return createConfig({
-    publicClient,
-    webSocketPublicClient,
-    connectors: SUPPORTED_WALLET_IDS.map(walletId => CONNECTORS[walletId]),
-    autoConnect: true,
-  });
-}
-
-export const config = createWagmiConfig();
+createConfig({
+  publicClient,
+  webSocketPublicClient,
+  connectors: SUPPORTED_WALLET_IDS.map(walletId => CONNECTORS[walletId]),
+  autoConnect: true,
+});

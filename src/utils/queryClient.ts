@@ -1,6 +1,6 @@
 import { QueryCache, QueryClient } from '@tanstack/react-query';
 import stringify from 'safe-stable-stringify';
-import { errorsStore } from 'stores/errors';
+import { publishError } from 'states/errors';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -11,7 +11,7 @@ export const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: error => {
-      errorsStore.set.publishError(error);
+      publishError(error);
     },
   }),
   logger: {

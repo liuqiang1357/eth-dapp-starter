@@ -1,10 +1,10 @@
 import { connect, disconnect } from '@wagmi/core';
 import { Popover } from 'antd';
-import { ComponentProps, FC, useEffect } from 'react';
+import { ComponentProps, FC } from 'react';
+import { useSnapshot } from 'valtio';
 import { Button } from 'app/_shared/Button';
 import { useWeb3State } from 'hooks/web3';
-import { uiStore } from 'stores/ui';
-import { web3Store } from 'stores/web3';
+import { uiState } from 'states/ui';
 import { SUPPORTED_WALLET_IDS, WALLET_CONFIGS } from 'utils/configs';
 import { formatLongText } from 'utils/formatters';
 import { WalletId } from 'utils/models';
@@ -15,16 +15,12 @@ import disconnectImage from './_images/disconnect.svg';
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { walletId, account } = useWeb3State();
 
-  const walletsPopoverOpen = uiStore.use.walletsPopoverOpen();
+  const { walletsPopoverOpen } = useSnapshot(uiState);
 
   const connectWallet = async (walletId: WalletId) => {
     await connect({ connector: CONNECTORS[walletId] });
-    uiStore.set.walletsPopoverOpen(false);
+    uiState.walletsPopoverOpen = false;
   };
-
-  useEffect(() => {
-    web3Store.set.registerListeners();
-  }, []);
 
   return (
     <div className={tm('inline-block', className)} {...rest}>
@@ -47,7 +43,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
       ) : (
         <Popover
           open={walletsPopoverOpen}
-          onOpenChange={open => uiStore.set.walletsPopoverOpen(open)}
+          onOpenChange={open => (uiState.walletsPopoverOpen = open)}
           trigger="click"
           content={
             <div className="flex min-w-[180px] flex-col space-y-[10px] p-[20px]">
