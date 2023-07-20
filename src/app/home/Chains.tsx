@@ -21,7 +21,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
             Switch to {CHAIN_CONFIGS[chainId].name}
           </Button>
         </div>,
-        99999999,
+        100_000_000,
       );
       return disposer;
     }

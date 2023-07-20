@@ -27,8 +27,8 @@ export const web3State = derive(
   { proxy: wagmiState },
 );
 
-export function registerWeb3Listeners(): void {
-  watchAccount(() => {
+export function registerWeb3Listeners(): () => void {
+  const accountListenerDisposer = watchAccount(() => {
     const account = getAccount();
     web3State.walletId = account.isConnected
       ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTORS[walletId] === account.connector) ?? null
@@ -36,10 +36,13 @@ export function registerWeb3Listeners(): void {
     web3State.account = account.address != null ? (account.address.toLowerCase() as Address) : null;
   });
 
-  watchNetwork(() => {
+  const networkListenerDisposer = watchNetwork(() => {
     const network = getNetwork();
     web3State.walletChainId = network.chain?.id ?? null;
   });
-}
 
-registerWeb3Listeners();
+  return () => {
+    accountListenerDisposer();
+    networkListenerDisposer();
+  };
+}

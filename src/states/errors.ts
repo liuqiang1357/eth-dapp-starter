@@ -18,15 +18,22 @@ export function clearError(error: Error): void {
   }
 }
 
-export function registerErrorListeners(): void {
-  window.addEventListener('error', event => {
+export function registerErrorListeners(): () => void {
+  const errorEventListener = (event: ErrorEvent) => {
     event.preventDefault();
     publishError(event.error);
-  });
-  window.addEventListener('unhandledrejection', event => {
+  };
+
+  const promiseRejectionEventListener = (event: PromiseRejectionEvent) => {
     event.preventDefault();
     publishError(event.reason);
-  });
-}
+  };
 
-registerErrorListeners();
+  window.addEventListener('error', errorEventListener);
+  window.addEventListener('unhandledrejection', promiseRejectionEventListener);
+
+  return () => {
+    window.removeEventListener('error', errorEventListener);
+    window.removeEventListener('unhandledrejection', promiseRejectionEventListener);
+  };
+}
