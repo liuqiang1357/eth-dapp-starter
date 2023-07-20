@@ -2,8 +2,8 @@ import { App as AntApp } from 'antd';
 import { FC, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Home } from 'app/home';
-import { syncSettings } from 'states/settings';
-import { registerWeb3Listeners } from 'states/web3';
+import { syncSettingsState } from 'states/settings';
+import { syncWeb3State } from 'states/web3';
 import { ErrorHandlder } from './ErrorHandler';
 
 export const App: FC = () => {
@@ -14,11 +14,11 @@ export const App: FC = () => {
   }, [pathname]);
 
   useEffect(() => {
-    return syncSettings();
+    return syncSettingsState();
   }, []);
 
   useEffect(() => {
-    return registerWeb3Listeners();
+    return syncWeb3State();
   }, []);
 
   return (

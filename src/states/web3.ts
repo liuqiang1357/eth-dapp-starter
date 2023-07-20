@@ -1,33 +1,32 @@
 import { getAccount, getNetwork, watchAccount, watchNetwork } from '@wagmi/core';
-import { proxy } from 'valtio';
+import { proxy, subscribe } from 'valtio';
 import { derive } from 'valtio/utils';
 import { Address } from 'viem';
 import { SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from 'utils/configs';
+import { WalletError } from 'utils/errors';
 import { ChainId, WalletId } from 'utils/models';
 import { CONNECTORS } from 'utils/web3';
 import { settingsState } from './settings';
 
-const wagmiState = proxy({
+export const web3State = proxy({
   walletId: null as WalletId | null,
   walletChainId: null as number | null,
   account: null as Address | null,
+
+  derived: derive({
+    dappChainId: get => get(settingsState).dappChainId,
+  }),
+
+  get chainId() {
+    if (this.walletChainId != null && SUPPORTED_CHAIN_IDS.includes(this.walletChainId)) {
+      return this.walletChainId as ChainId;
+    } else {
+      return this.derived.dappChainId;
+    }
+  },
 });
 
-export const web3State = derive(
-  {
-    chainId: get => {
-      const walletChainId = get(wagmiState).walletChainId;
-      if (walletChainId != null && SUPPORTED_CHAIN_IDS.includes(walletChainId)) {
-        return walletChainId as ChainId;
-      } else {
-        return get(settingsState).dappChainId;
-      }
-    },
-  },
-  { proxy: wagmiState },
-);
-
-export function registerWeb3Listeners(): () => void {
+export function syncWeb3State(): () => void {
   const accountListenerDisposer = watchAccount(() => {
     const account = getAccount();
     web3State.walletId = account.isConnected
@@ -41,8 +40,27 @@ export function registerWeb3Listeners(): () => void {
     web3State.walletChainId = network.chain?.id ?? null;
   });
 
+  const syncDappChainIdDisposer = subscribe(web3State, () => {
+    settingsState.dappChainId = web3State.chainId;
+  });
+
   return () => {
     accountListenerDisposer();
     networkListenerDisposer();
+    syncDappChainIdDisposer();
   };
+}
+
+export async function switchChain(chainId: ChainId): Promise<void> {
+  if (web3State.walletId != null) {
+    const connector = CONNECTORS[web3State.walletId];
+    if (connector.switchChain) {
+      await connector.switchChain(chainId);
+    } else {
+      throw new WalletError('Switching network failed.', {
+        code: WalletError.Codes.FailedToSwitchNetwork,
+      });
+    }
+  }
+  settingsState.dappChainId = chainId;
 }

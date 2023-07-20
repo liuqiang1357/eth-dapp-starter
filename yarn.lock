@@ -2395,6 +2395,11 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
+"@tanstack/eslint-plugin-query@^4.29.25":
+  version "4.29.25"
+  resolved "https://registry.yarnpkg.com/@tanstack/eslint-plugin-query/-/eslint-plugin-query-4.29.25.tgz#422693f8a08d3dc98ca22135913b9a36ae51510c"
+  integrity sha512-wn+My+vBVTH/BZouf5syhUiUrCYiuAwRdepO/gjn6BBwYyN7XQ8cS/ooO0h2ut0h1G3UO52q26An8jYJCjR29w==
+
 "@tanstack/query-core@4.29.19":
   version "4.29.19"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.19.tgz#49ccbd0606633d1e55baf3b91ab7cc7aef411b1d"

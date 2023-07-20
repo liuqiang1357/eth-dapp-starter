@@ -11,22 +11,16 @@ export const Home: FC = () => {
   const [address, setAddress] = useState('');
   const [to, setTo] = useState('');
   const [rawAmount, setRawAmount] = useState('');
-  const [sending, setSending] = useState(false);
 
   const { account } = useWeb3State();
 
   const { data: rawBalance } = useErc20RawBalance(isAddress(address) ? address : null);
 
-  const { mutateAsync: transfer } = useErc20Transfer();
+  const { mutateAsync: transfer, isLoading: sending } = useErc20Transfer();
 
   const send = async () => {
     if (isAddress(address) && isAddress(to) && rawAmount !== '') {
-      try {
-        setSending(true);
-        await transfer({ address, to, rawAmount });
-      } finally {
-        setSending(false);
-      }
+      await transfer({ address, to, rawAmount });
     }
   };
 
@@ -46,7 +40,7 @@ export const Home: FC = () => {
           <div className="ml-[10px]">{account}</div>
         </div>
         <Input
-          placeholder="ERC20 contract hash"
+          placeholder="ERC20 contract address"
           value={address}
           onChange={event => setAddress(event.target.value)}
         />

@@ -4,7 +4,7 @@ import { remove } from 'lodash-es';
 import { FC, useEffect, useRef } from 'react';
 import { usePageVisibility } from 'react-page-visibility';
 import { useSnapshot } from 'valtio';
-import { clearError, errorsState, registerErrorListeners } from 'states/errors';
+import { clearError, errorsState, syncErrorsState } from 'states/errors';
 import { BaseError } from 'utils/errors';
 
 export const ErrorHandlder: FC = () => {
@@ -13,7 +13,7 @@ export const ErrorHandlder: FC = () => {
   const { lastError } = useSnapshot(errorsState);
 
   useEffect(() => {
-    return registerErrorListeners();
+    return syncErrorsState();
   }, []);
 
   const pageVisible = usePageVisibility();

@@ -8,7 +8,7 @@ export const settingsState = proxy({
   dappChainId: SUPPORTED_CHAIN_IDS[0],
 });
 
-export function syncSettings(): () => void {
+export function syncSettingsState(): () => void {
   const raw = localStorage.getItem(SETTINGS_KEY);
   const persisted = raw != null ? JSON.parse(raw) : null;
 

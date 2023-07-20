@@ -9,8 +9,8 @@ export function useErc20RawBalance(address: Address | null) {
   return useQuery(
     address != null && account != null
       ? {
-          queryKey: ['Erc20RawBalance', { chainId, address, account }] as const,
-          queryFn: async ({ queryKey: [, { address, account }] }) => {
+          queryKey: ['Erc20RawBalance', { chainId, address, account }],
+          queryFn: async () => {
             const balance = await readContract({
               chainId,
               address,

@@ -18,7 +18,7 @@ export function clearError(error: Error): void {
   }
 }
 
-export function registerErrorListeners(): () => void {
+export function syncErrorsState(): () => void {
   const errorEventListener = (event: ErrorEvent) => {
     event.preventDefault();
     publishError(event.error);

@@ -1,8 +1,6 @@
 import { extendTailwindMerge } from 'tailwind-merge';
 
-export function tw(strings: TemplateStringsArray, ...keys: unknown[]): string {
-  return keys.reduce((acc, key, i) => acc + strings[i] + key, '') + strings[keys.length];
-}
+export const tw = String.raw;
 
 export const tm = extendTailwindMerge({
   conflictingClassGroups: {
