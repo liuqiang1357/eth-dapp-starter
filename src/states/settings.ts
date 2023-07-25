@@ -5,19 +5,47 @@ import { SUPPORTED_CHAIN_IDS } from 'utils/configs';
 const SETTINGS_KEY = 'SETTINGS';
 
 export const settingsState = proxy({
-  dappChainId: SUPPORTED_CHAIN_IDS[0],
+  local: {
+    dappChainId: SUPPORTED_CHAIN_IDS[0],
+  },
+  session: {},
 });
 
-export function syncSettingsState(): () => void {
+function syncLocalSettingsState() {
   const raw = localStorage.getItem(SETTINGS_KEY);
-  const persisted = raw != null ? JSON.parse(raw) : null;
 
-  if (!SUPPORTED_CHAIN_IDS.includes(persisted?.dappChainId)) {
-    delete persisted?.dappChainId;
+  if (raw != null) {
+    const persisted = JSON.parse(raw);
+    if (!SUPPORTED_CHAIN_IDS.includes(persisted.dappChainId)) {
+      delete persisted.dappChainId;
+    }
+    merge(settingsState.local, persisted);
   }
-  merge(settingsState, persisted);
 
-  return subscribe(settingsState, () => {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsState));
+  return subscribe(settingsState.local, () => {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsState.local));
   });
+}
+
+function syncSessionSettingsState() {
+  const raw = sessionStorage.getItem(SETTINGS_KEY);
+
+  if (raw != null) {
+    const persisted = JSON.parse(raw);
+    merge(settingsState.session, persisted);
+  }
+
+  return subscribe(settingsState.session, () => {
+    sessionStorage.setItem(SETTINGS_KEY, JSON.stringify(settingsState.session));
+  });
+}
+
+export function syncSettingsState(): () => void {
+  const localSettingsDisposer = syncLocalSettingsState();
+  const sessionSettingsDisposer = syncSessionSettingsState();
+
+  return () => {
+    localSettingsDisposer();
+    sessionSettingsDisposer();
+  };
 }

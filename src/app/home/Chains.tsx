@@ -1,13 +1,13 @@
 import { App, Popover } from 'antd';
 import { ComponentProps, FC, useEffect } from 'react';
+import { useSnapshot } from 'valtio';
 import { Button } from 'app/_shared/Button';
-import { useWeb3State } from 'hooks/web3';
-import { switchChain } from 'states/web3';
+import { switchChain, web3State } from 'states/web3';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS } from 'utils/configs';
 import { tm } from 'utils/tailwind';
 
 export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
-  const { chainId, walletChainId } = useWeb3State();
+  const { chainId, walletChainId } = useSnapshot(web3State);
 
   const { message } = App.useApp();
 

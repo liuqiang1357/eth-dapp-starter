@@ -1,19 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Address, readContract, waitForTransaction, writeContract } from '@wagmi/core';
+import { useSnapshot } from 'valtio';
 import erc20 from 'assets/abis/erc20';
-import { useWeb3State } from './web3';
+import { web3State } from 'states/web3';
 
-export function useErc20RawBalance(address: Address | null) {
-  const { chainId, account } = useWeb3State();
+export interface UseErc20RawBalanceParams {
+  address: Address;
+}
+
+export function useErc20RawBalance(params: UseErc20RawBalanceParams | null) {
+  const { chainId, account } = useSnapshot(web3State);
 
   return useQuery(
-    address != null && account != null
+    account != null && params
       ? {
-          queryKey: ['Erc20RawBalance', { chainId, address, account }],
+          queryKey: ['Erc20RawBalance', { chainId, account, ...params }],
           queryFn: async () => {
             const balance = await readContract({
               chainId,
-              address,
+              address: params.address,
               abi: erc20,
               functionName: 'balanceOf',
               args: [account],
@@ -25,20 +30,18 @@ export function useErc20RawBalance(address: Address | null) {
   );
 }
 
+export interface Erc20TransferParams {
+  address: Address;
+  to: Address;
+  rawAmount: string;
+}
+
 export function useErc20Transfer() {
-  const { chainId } = useWeb3State();
+  const { chainId } = useSnapshot(web3State);
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      address,
-      to,
-      rawAmount,
-    }: {
-      address: Address;
-      to: Address;
-      rawAmount: string;
-    }) => {
+    mutationFn: async ({ address, to, rawAmount }: Erc20TransferParams) => {
       const { hash } = await writeContract({
         chainId,
         address,

@@ -1,9 +1,10 @@
 import { Input } from 'antd';
 import { FC, useState } from 'react';
+import { useSnapshot } from 'valtio';
 import { isAddress } from 'viem';
 import { Button } from 'app/_shared/Button';
 import { useErc20RawBalance, useErc20Transfer } from 'hooks/erc20';
-import { useWeb3State } from 'hooks/web3';
+import { web3State } from 'states/web3';
 import { Chains } from './Chains';
 import { Wallets } from './Wallets';
 
@@ -12,9 +13,9 @@ export const Home: FC = () => {
   const [to, setTo] = useState('');
   const [rawAmount, setRawAmount] = useState('');
 
-  const { account } = useWeb3State();
+  const { account } = useSnapshot(web3State);
 
-  const { data: rawBalance } = useErc20RawBalance(isAddress(address) ? address : null);
+  const { data: rawBalance } = useErc20RawBalance(isAddress(address) ? { address } : null);
 
   const { mutateAsync: transfer, isLoading: sending } = useErc20Transfer();
 

@@ -3,8 +3,8 @@ import { Popover } from 'antd';
 import { ComponentProps, FC } from 'react';
 import { useSnapshot } from 'valtio';
 import { Button } from 'app/_shared/Button';
-import { useWeb3State } from 'hooks/web3';
 import { uiState } from 'states/ui';
+import { web3State } from 'states/web3';
 import { SUPPORTED_WALLET_IDS, WALLET_CONFIGS } from 'utils/configs';
 import { formatLongText } from 'utils/formatters';
 import { WalletId } from 'utils/models';
@@ -13,7 +13,7 @@ import { CONNECTORS } from 'utils/web3';
 import disconnectImage from './_images/disconnect.svg';
 
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
-  const { walletId, account } = useWeb3State();
+  const { walletId, account } = useSnapshot(web3State);
 
   const { walletsPopoverOpen } = useSnapshot(uiState);
 

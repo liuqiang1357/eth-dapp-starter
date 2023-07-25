@@ -14,7 +14,7 @@ export const web3State = proxy({
   account: null as Address | null,
 
   derived: derive({
-    dappChainId: get => get(settingsState).dappChainId,
+    dappChainId: get => get(settingsState).local.dappChainId,
   }),
 
   get chainId() {
@@ -41,7 +41,7 @@ export function syncWeb3State(): () => void {
   });
 
   const syncDappChainIdDisposer = subscribe(web3State, () => {
-    settingsState.dappChainId = web3State.chainId;
+    settingsState.local.dappChainId = web3State.chainId;
   });
 
   return () => {
@@ -62,5 +62,5 @@ export async function switchChain(chainId: ChainId): Promise<void> {
       });
     }
   }
-  settingsState.dappChainId = chainId;
+  settingsState.local.dappChainId = chainId;
 }
