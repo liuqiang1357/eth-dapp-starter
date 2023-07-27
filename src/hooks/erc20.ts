@@ -3,6 +3,7 @@ import { Address, readContract, waitForTransaction, writeContract } from '@wagmi
 import { useSnapshot } from 'valtio';
 import erc20 from 'assets/abis/erc20';
 import { web3State } from 'states/web3';
+import { skipQuery } from 'utils/queryClient';
 
 export interface UseErc20RawBalanceParams {
   address: Address;
@@ -26,7 +27,7 @@ export function useErc20RawBalance(params: UseErc20RawBalanceParams | null) {
             return balance.toString();
           },
         }
-      : { enabled: false },
+      : skipQuery,
   );
 }
 

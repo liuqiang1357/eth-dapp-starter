@@ -13,3 +13,5 @@ export const queryClient = new QueryClient({
     },
   }),
 });
+
+export const skipQuery = { queryKey: ['Skip'], enabled: false };
