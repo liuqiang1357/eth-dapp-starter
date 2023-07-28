@@ -13,7 +13,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
 
   useEffect(() => {
     if (chainId !== walletChainId && walletChainId != null) {
-      const disposer = message.info(
+      return message.info(
         <div className="inline-flex">
           <div>The wallet is not connected to {CHAIN_CONFIGS[chainId].name}.</div>
           <Button className="ml-[10px] underline" onClick={() => switchChain(chainId)}>
@@ -22,7 +22,6 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
         </div>,
         100_000_000,
       );
-      return disposer;
     }
   }, [chainId, message, walletChainId]);
 

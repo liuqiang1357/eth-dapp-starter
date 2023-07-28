@@ -4,6 +4,7 @@ import { publishError } from 'states/errors';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      staleTime: 60_000,
       retry: 0,
     },
   },
@@ -13,5 +14,3 @@ export const queryClient = new QueryClient({
     },
   }),
 });
-
-export const skipQuery = { queryKey: ['Skip'], enabled: false };

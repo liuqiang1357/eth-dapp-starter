@@ -27,7 +27,7 @@ export const web3State = proxy({
 });
 
 export function syncWeb3State(): () => void {
-  const accountListenerDisposer = watchAccount(() => {
+  const accountDisposer = watchAccount(() => {
     const account = getAccount();
     web3State.walletId = account.isConnected
       ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTORS[walletId] === account.connector) ?? null
@@ -35,19 +35,19 @@ export function syncWeb3State(): () => void {
     web3State.account = account.address != null ? (account.address.toLowerCase() as Address) : null;
   });
 
-  const networkListenerDisposer = watchNetwork(() => {
+  const networkDisposer = watchNetwork(() => {
     const network = getNetwork();
     web3State.walletChainId = network.chain?.id ?? null;
   });
 
-  const syncDappChainIdDisposer = subscribe(web3State, () => {
+  const chainIdDisposer = subscribe(web3State, () => {
     settingsState.local.dappChainId = web3State.chainId;
   });
 
   return () => {
-    accountListenerDisposer();
-    networkListenerDisposer();
-    syncDappChainIdDisposer();
+    accountDisposer();
+    networkDisposer();
+    chainIdDisposer();
   };
 }
 

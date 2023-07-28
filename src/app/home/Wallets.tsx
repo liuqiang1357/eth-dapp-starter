@@ -17,7 +17,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
 
   const { walletsPopoverOpen } = useSnapshot(uiState);
 
-  const connectWallet = async (walletId: WalletId) => {
+  const handleConnectClick = async (walletId: WalletId) => {
     await connect({ connector: CONNECTORS[walletId] });
     uiState.walletsPopoverOpen = false;
   };
@@ -52,7 +52,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
                   key={walletId}
                   className="justify-start"
                   type="default"
-                  onClick={() => connectWallet(walletId)}
+                  onClick={() => handleConnectClick(walletId)}
                 >
                   <img className="h-[16px] w-[16px]" src={WALLET_CONFIGS[walletId].icon} />
                   <div className="ml-[10px]">{WALLET_CONFIGS[walletId].name}</div>

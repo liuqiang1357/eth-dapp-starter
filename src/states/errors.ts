@@ -19,21 +19,21 @@ export function clearError(error: Error): void {
 }
 
 export function syncErrorsState(): () => void {
-  const errorEventListener = (event: ErrorEvent) => {
+  const errorListener = (event: ErrorEvent) => {
     event.preventDefault();
     publishError(event.error);
   };
 
-  const promiseRejectionEventListener = (event: PromiseRejectionEvent) => {
+  const rejectionListener = (event: PromiseRejectionEvent) => {
     event.preventDefault();
     publishError(event.reason);
   };
 
-  window.addEventListener('error', errorEventListener);
-  window.addEventListener('unhandledrejection', promiseRejectionEventListener);
+  window.addEventListener('error', errorListener);
+  window.addEventListener('unhandledrejection', rejectionListener);
 
   return () => {
-    window.removeEventListener('error', errorEventListener);
-    window.removeEventListener('unhandledrejection', promiseRejectionEventListener);
+    window.removeEventListener('error', errorListener);
+    window.removeEventListener('unhandledrejection', rejectionListener);
   };
 }

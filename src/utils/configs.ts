@@ -5,6 +5,8 @@ import walletConnnect from 'assets/images/wallets/walletConnect.svg';
 import { ChainConfig, ChainId, WalletConfig, WalletId } from './models';
 
 // Chain configs
+export const SUPPORTED_CHAIN_IDS = [ChainId.PolygonMumbai, ChainId.ArbitrumOne];
+
 export const CHAIN_CONFIGS: Record<ChainId, ChainConfig> = {
   [ChainId.PolygonMumbai]: {
     name: 'Polygon Mumbai',
@@ -16,10 +18,9 @@ export const CHAIN_CONFIGS: Record<ChainId, ChainConfig> = {
   },
 };
 
-// Supported chains
-export const SUPPORTED_CHAIN_IDS = [ChainId.PolygonMumbai, ChainId.ArbitrumOne];
-
 // Wallet configs
+export const SUPPORTED_WALLET_IDS = [WalletId.MetaMask, WalletId.WalletConnect];
+
 export const WALLET_CONFIGS: Record<WalletId, WalletConfig> = {
   [WalletId.MetaMask]: {
     name: 'MetaMask',
@@ -30,6 +31,3 @@ export const WALLET_CONFIGS: Record<WalletId, WalletConfig> = {
     icon: walletConnnect,
   },
 };
-
-// Supported wallets
-export const SUPPORTED_WALLET_IDS = [WalletId.MetaMask, WalletId.WalletConnect];
