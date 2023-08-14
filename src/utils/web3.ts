@@ -37,10 +37,10 @@ export function convertMaybeViemError(error: unknown): unknown {
         cause: error,
       });
     }
-    if (error.cause instanceof UserRejectedRequestError) {
-      return new WalletError(error.cause.shortMessage, {
+    if ((error as any).cause instanceof UserRejectedRequestError) {
+      return new WalletError((error as any).cause.shortMessage, {
         code: WalletError.Codes.UserRejected,
-        cause: error.cause,
+        cause: (error as any).cause,
       });
     }
     return new WalletError(error.shortMessage, {

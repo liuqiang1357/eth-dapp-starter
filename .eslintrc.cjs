@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const fs = require('fs');
 
 const foldersUnderSrc = fs
@@ -7,13 +9,15 @@ const foldersUnderSrc = fs
 
 module.exports = {
   root: true,
+  env: { browser: true, es2020: true },
   extends: [
-    'react-app',
     'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
-    'plugin:@tanstack/query/recommended',
   ],
-  plugins: ['import'],
+  plugins: ['import', 'react-refresh'],
   rules: {
     eqeqeq: ['error', 'always', { null: 'never' }],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -27,15 +31,22 @@ module.exports = {
         pathGroupsExcludedImportTypes: [],
       },
     ],
-    'jsx-a11y/alt-text': 'off',
     'react/self-closing-comp': 'error',
+    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
   overrides: [
+    {
+      files: ['*.{js,jsx}'],
+      parserOptions: {
+        sourceType: 'module',
+      },
+    },
     {
       files: ['*.{ts,tsx}'],
       extends: ['plugin:@typescript-eslint/recommended'],
       parserOptions: {
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './tsconfig.node.json'],
+        tsconfigRootDir: __dirname,
       },
       rules: {
         '@typescript-eslint/explicit-module-boundary-types': [
@@ -54,4 +65,6 @@ module.exports = {
       },
     },
   ],
+  ignorePatterns: ['!.*', 'node_modules', 'dist'],
+  settings: { react: { version: 'detect' } },
 };

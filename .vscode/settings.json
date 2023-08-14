@@ -1,5 +1,5 @@
 {
-  // Built-in Settings
+  // Built-in settings
   "editor.codeActionsOnSave": { "source.fixAll": true },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
@@ -11,10 +11,7 @@
   "typescript.preferences.quoteStyle": "double",
   "typescript.tsdk": "./node_modules/typescript/lib",
 
-  // Extensions Settings
-  "path-autocomplete.enableFolderTrailingSlash": false,
-  "path-autocomplete.extensionOnImport": true,
-  "path-autocomplete.pathMappings": { "$root": "${folder}/src" },
+  // Extensions settings
   "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName"],
   "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
 }

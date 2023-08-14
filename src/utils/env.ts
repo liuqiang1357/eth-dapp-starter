@@ -1,3 +1,3 @@
-export const ENV_PRODUCTION = process.env.NODE_ENV === 'production';
+export const ENV_PRODUCTION = import.meta.env.PROD;
 
-export const TARGET_PRODUCTION = process.env.REACT_APP_TARGET === 'production';
+export const TARGET_PRODUCTION = import.meta.env.VITE_APP_TARGET === 'production';

@@ -68,7 +68,7 @@ export class WalletError extends BaseError {
   getLocalMessage(): string {
     const { code } = this;
     if (i18n.exists(`errors.WalletError.${code}`)) {
-      return i18n.t(`errors.WalletError.${code}`, this.data) as string;
+      return i18n.t(`errors.WalletError.${code}`, this.data);
     }
     return this.message;
   }
@@ -99,7 +99,7 @@ export class BackendError extends BaseError {
   getLocalMessage(): string {
     const { code } = this;
     if (i18n.exists(`errors.BackendError.${code}`)) {
-      return i18n.t(`errors.BackendError.${code}`, this.data) as string;
+      return i18n.t(`errors.BackendError.${code}`, this.data);
     }
     return this.message;
   }

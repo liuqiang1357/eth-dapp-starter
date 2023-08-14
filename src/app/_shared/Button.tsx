@@ -122,3 +122,5 @@ export const Button = forwardRef<ComponentRef<typeof AntButton>, Props>(
     );
   },
 );
+
+Button.displayName = 'Button';
