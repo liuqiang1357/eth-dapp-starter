@@ -4,6 +4,7 @@ import { ConfigProvider } from 'antd';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import 'i18n';
+import 'states';
 import 'styles/index.css';
 import { App } from 'app';
 import { antdTheme } from 'utils/antdTheme';
