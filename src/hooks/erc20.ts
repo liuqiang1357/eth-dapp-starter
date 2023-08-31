@@ -37,7 +37,7 @@ interface Erc20TransferParams {
 }
 
 export function useErc20Transfer() {
-  const { chainId } = useSnapshot(web3State);
+  const { chainId, account } = useSnapshot(web3State);
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -50,7 +50,7 @@ export function useErc20Transfer() {
         args: [to, BigInt(rawAmount)],
       });
       await waitForTransaction({ chainId, hash });
-      await queryClient.invalidateQueries({ queryKey: ['Erc20RawBalance'] });
+      await queryClient.invalidateQueries({ queryKey: ['Erc20RawBalance', { chainId, account }] });
     },
   });
 }
