@@ -1,4 +1,4 @@
-import { merge } from 'lodash-es';
+import { merge, pick } from 'lodash-es';
 import { proxy, subscribe } from 'valtio';
 import { SUPPORTED_CHAIN_IDS } from 'utils/configs';
 
@@ -19,7 +19,7 @@ function syncLocalSettingsState() {
     if (!SUPPORTED_CHAIN_IDS.includes(persisted.dappChainId)) {
       delete persisted.dappChainId;
     }
-    merge(settingsState.local, persisted);
+    merge(settingsState.local, pick(persisted, Object.keys(settingsState.local)));
   }
 
   return subscribe(settingsState.local, () => {
@@ -32,7 +32,7 @@ function syncSessionSettingsState() {
 
   if (raw != null) {
     const persisted = JSON.parse(raw);
-    merge(settingsState.session, persisted);
+    merge(settingsState.session, pick(persisted, Object.keys(settingsState.session)));
   }
 
   return subscribe(settingsState.session, () => {
