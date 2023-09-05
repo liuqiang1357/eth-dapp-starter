@@ -15,13 +15,15 @@ export const Home: FC = () => {
 
   const { account } = useSnapshot(web3State);
 
-  const { data: rawBalance } = useErc20RawBalance(isAddress(address) ? { address } : null);
+  const { data: rawBalance } = useErc20RawBalance(
+    account != null && isAddress(address) ? { account, address } : null,
+  );
 
   const { mutateAsync: transfer, isLoading: sending } = useErc20Transfer();
 
   const send = async () => {
-    if (isAddress(address) && isAddress(to) && rawAmount !== '') {
-      await transfer({ address, to, rawAmount });
+    if (account != null && isAddress(address) && isAddress(to) && rawAmount !== '') {
+      await transfer({ account, address, to, rawAmount });
     }
   };
 

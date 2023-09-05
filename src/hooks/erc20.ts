@@ -6,44 +6,47 @@ import erc20 from 'assets/abis/erc20';
 import { web3State } from 'states/web3';
 
 interface UseErc20RawBalanceParams {
+  account: Address;
   address: Address;
 }
 
 export function useErc20RawBalance(params: UseErc20RawBalanceParams | null) {
-  const { chainId, account } = useSnapshot(web3State);
+  const { chainId } = useSnapshot(web3State);
 
   return useQuery({
-    queryKey: ['Erc20RawBalance', { chainId, account, ...params }],
+    queryKey: ['Erc20RawBalance', { chainId, ...params }],
     queryFn: async () => {
-      invariant(account != null && params != null);
+      invariant(params != null);
 
       const balance = await readContract({
         chainId,
         address: params.address,
         abi: erc20,
         functionName: 'balanceOf',
-        args: [account],
+        args: [params.account],
       });
       return balance.toString();
     },
-    enabled: account != null && params != null,
+    enabled: params != null,
   });
 }
 
 interface Erc20TransferParams {
+  account: Address;
   address: Address;
   to: Address;
   rawAmount: string;
 }
 
 export function useErc20Transfer() {
-  const { chainId, account } = useSnapshot(web3State);
+  const { chainId } = useSnapshot(web3State);
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ address, to, rawAmount }: Erc20TransferParams) => {
+    mutationFn: async ({ account, address, to, rawAmount }: Erc20TransferParams) => {
       const { hash } = await writeContract({
         chainId,
+        account,
         address,
         abi: erc20,
         functionName: 'transfer',
