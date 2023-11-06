@@ -1,59 +1,39 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Address, readContract, waitForTransaction, writeContract } from '@wagmi/core';
+import { waitForTransaction } from '@wagmi/core';
 import invariant from 'tiny-invariant';
 import { useSnapshot } from 'valtio';
-import erc20 from 'assets/abis/erc20';
+import {
+  getErc20RawBalance,
+  GetErc20RawBalanceParams,
+  transferErc20,
+  TransferErc20Params,
+} from 'apis/erc20';
 import { web3State } from 'states/web3';
 
-interface UseErc20RawBalanceParams {
-  account: Address;
-  address: Address;
-}
-
-export function useErc20RawBalance(params: UseErc20RawBalanceParams | null) {
+export function useErc20RawBalance(params: Omit<GetErc20RawBalanceParams, 'chainId'> | null) {
   const { chainId } = useSnapshot(web3State);
 
   return useQuery({
     queryKey: ['Erc20RawBalance', { chainId, ...params }],
     queryFn: async () => {
       invariant(params != null);
-
-      const balance = await readContract({
-        chainId,
-        address: params.address,
-        abi: erc20,
-        functionName: 'balanceOf',
-        args: [params.account],
-      });
-      return balance.toString();
+      return await getErc20RawBalance({ chainId, ...params });
     },
     enabled: params != null,
   });
 }
 
-interface Erc20TransferParams {
-  account: Address;
-  address: Address;
-  to: Address;
-  rawAmount: string;
-}
-
-export function useErc20Transfer() {
+export function useTransferErc20() {
   const { chainId } = useSnapshot(web3State);
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ account, address, to, rawAmount }: Erc20TransferParams) => {
-      const { hash } = await writeContract({
-        chainId,
-        account,
-        address,
-        abi: erc20,
-        functionName: 'transfer',
-        args: [to, BigInt(rawAmount)],
-      });
+    mutationFn: async (params: Omit<TransferErc20Params, 'chainId'>) => {
+      const hash = await transferErc20({ chainId, ...params });
       await waitForTransaction({ chainId, hash });
-      await queryClient.invalidateQueries({ queryKey: ['Erc20RawBalance', { chainId, account }] });
+      await queryClient.invalidateQueries({
+        queryKey: ['Erc20RawBalance', { chainId, account: params.account }],
+      });
     },
   });
 }

@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { useSnapshot } from 'valtio';
 import { isAddress } from 'viem';
 import { Button } from 'app/_shared/Button';
-import { useErc20RawBalance, useErc20Transfer } from 'hooks/erc20';
+import { useErc20RawBalance, useTransferErc20 } from 'hooks/erc20';
 import { web3State } from 'states/web3';
 import { Chains } from './Chains';
 import { Wallets } from './Wallets';
@@ -19,7 +19,7 @@ export const Home: FC = () => {
     account != null && isAddress(address) ? { account, address } : null,
   );
 
-  const { mutateAsync: transfer, isLoading: sending } = useErc20Transfer();
+  const { mutateAsync: transfer, isLoading: sending } = useTransferErc20();
 
   const send = async () => {
     if (account != null && isAddress(address) && isAddress(to) && rawAmount !== '') {
