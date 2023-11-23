@@ -1,38 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { waitForTransaction } from '@wagmi/core';
 import invariant from 'tiny-invariant';
-import { useSnapshot } from 'valtio';
 import {
   getErc20RawBalance,
   GetErc20RawBalanceParams,
   transferErc20,
   TransferErc20Params,
 } from 'apis/erc20';
-import { web3State } from 'states/web3';
 
-export function useErc20RawBalance(params: Omit<GetErc20RawBalanceParams, 'chainId'> | null) {
-  const { chainId } = useSnapshot(web3State);
-
+export function useErc20RawBalance(params: GetErc20RawBalanceParams | null) {
   return useQuery({
-    queryKey: ['Erc20RawBalance', { chainId, ...params }],
+    queryKey: ['Erc20RawBalance', params],
     queryFn: async () => {
       invariant(params != null);
-      return await getErc20RawBalance({ chainId, ...params });
+      return await getErc20RawBalance(params);
     },
     enabled: params != null,
   });
 }
 
 export function useTransferErc20() {
-  const { chainId } = useSnapshot(web3State);
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (params: Omit<TransferErc20Params, 'chainId'>) => {
-      const hash = await transferErc20({ chainId, ...params });
-      await waitForTransaction({ chainId, hash });
+    mutationFn: async (params: TransferErc20Params) => {
+      const hash = await transferErc20(params);
+      await waitForTransaction({ chainId: params.chainId, hash });
       await queryClient.invalidateQueries({
-        queryKey: ['Erc20RawBalance', { chainId, account: params.account }],
+        queryKey: ['Erc20RawBalance', { chainId: params.chainId, account: params.account }],
       });
     },
   });

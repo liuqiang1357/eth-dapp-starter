@@ -12,7 +12,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { message } = App.useApp();
 
   useEffect(() => {
-    if (chainId !== walletChainId && walletChainId != null) {
+    if (chainId !== walletChainId && chainId != null && walletChainId != null) {
       return message.info(
         <div className="inline-flex">
           <div>The wallet is not connected to {CHAIN_CONFIGS[chainId].name}.</div>
@@ -26,29 +26,31 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   }, [chainId, message, walletChainId]);
 
   return (
-    <div className={tm('inline-block', className)} {...rest}>
-      <Popover
-        content={
-          <div className="flex min-w-[180px] flex-col space-y-[10px] p-[20px]">
-            {SUPPORTED_CHAIN_IDS.map(chainId => (
-              <Button
-                key={chainId}
-                className="justify-start"
-                type="default"
-                onClick={() => switchChain(chainId)}
-              >
-                <img className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} />
-                <div className="ml-[10px]">{CHAIN_CONFIGS[chainId].name}</div>
-              </Button>
-            ))}
-          </div>
-        }
-      >
-        <Button type="default">
-          <img className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} />
-          <div className="ml-[10px]">{CHAIN_CONFIGS[chainId].name}</div>
-        </Button>
-      </Popover>
-    </div>
+    chainId != null && (
+      <div className={tm('inline-block', className)} {...rest}>
+        <Popover
+          content={
+            <div className="flex min-w-[180px] flex-col space-y-[10px] p-[20px]">
+              {SUPPORTED_CHAIN_IDS.map(chainId => (
+                <Button
+                  key={chainId}
+                  className="justify-start"
+                  type="default"
+                  onClick={() => switchChain(chainId)}
+                >
+                  <img className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} />
+                  <div className="ml-[10px]">{CHAIN_CONFIGS[chainId].name}</div>
+                </Button>
+              ))}
+            </div>
+          }
+        >
+          <Button type="default">
+            <img className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} />
+            <div className="ml-[10px]">{CHAIN_CONFIGS[chainId].name}</div>
+          </Button>
+        </Popover>
+      </div>
+    )
   );
 };

@@ -9,21 +9,27 @@ import { Chains } from './Chains';
 import { Wallets } from './Wallets';
 
 export const Home: FC = () => {
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState('0x63B7b6272C2D6571C577c97902cA584dA96c64f1');
   const [to, setTo] = useState('');
   const [rawAmount, setRawAmount] = useState('');
 
-  const { account } = useSnapshot(web3State);
+  const { chainId, account } = useSnapshot(web3State);
 
   const { data: rawBalance } = useErc20RawBalance(
-    account != null && isAddress(address) ? { account, address } : null,
+    chainId != null && account != null && isAddress(address) ? { chainId, account, address } : null,
   );
 
   const { mutateAsync: transfer, isLoading: sending } = useTransferErc20();
 
   const send = async () => {
-    if (account != null && isAddress(address) && isAddress(to) && rawAmount !== '') {
-      await transfer({ account, address, to, rawAmount });
+    if (
+      chainId != null &&
+      account != null &&
+      isAddress(address) &&
+      isAddress(to) &&
+      rawAmount !== ''
+    ) {
+      await transfer({ chainId, account, address, to, rawAmount });
     }
   };
 
