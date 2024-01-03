@@ -1,17 +1,17 @@
 {
   "name": "eth-dapp-starter",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
+    "build": "tsc && vite build --mode production",
+    "build:staging": "tsc && vite build --mode staging",
     "dev": "vite --mode staging",
     "dev:production": "vite --mode production",
-    "build:staging": "tsc && vite build --mode staging",
-    "build": "tsc && vite build --mode production",
+    "lint": "eslint . --max-warnings 0",
+    "prepare": "husky install",
     "preview": "vite preview",
-    "test": "vitest",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "prepare": "husky install"
+    "test": "vitest"
   },
   "dependencies": {
     "@tanstack/react-query": "^4.32.6",

@@ -35,6 +35,7 @@ module.exports = {
     'react/self-closing-comp': 'error',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
+  reportUnusedDisableDirectives: true,
   overrides: [
     {
       files: ['*.{js,jsx}'],

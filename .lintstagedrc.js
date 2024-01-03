@@ -1,3 +1,3 @@
 export default {
-  '*.(js|ts)?(x)': 'eslint --report-unused-disable-directives --max-warnings 0',
+  '*.(js|ts)?(x)': 'eslint --max-warnings 0',
 };
