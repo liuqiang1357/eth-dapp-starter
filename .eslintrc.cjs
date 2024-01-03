@@ -66,6 +66,6 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['!.*', 'node_modules', 'dist'],
+  ignorePatterns: ['dist'],
   settings: { react: { version: 'detect' } },
 };
