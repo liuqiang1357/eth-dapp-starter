@@ -1,10 +1,10 @@
 import { UtfString } from 'utfstring';
 
-export interface FormatLongTextOptions {
+export type FormatLongTextOptions = {
   headTailLength?: number;
   headLength?: number;
   tailLength?: number;
-}
+};
 
 export function formatLongText(
   value: string | null | undefined,
