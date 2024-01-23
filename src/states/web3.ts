@@ -32,7 +32,7 @@ export function syncWeb3State(): () => void {
     web3State.walletId = account.isConnected
       ? SUPPORTED_WALLET_IDS.find(walletId => CONNECTORS[walletId] === account.connector) ?? null
       : null;
-    web3State.account = account.address != null ? (account.address.toLowerCase() as Address) : null;
+    web3State.account = account.address != null ? account.address : null;
   });
 
   const networkDisposer = watchNetwork(() => {
@@ -54,7 +54,7 @@ export function syncWeb3State(): () => void {
 export async function switchChain(chainId: ChainId): Promise<void> {
   if (web3State.walletId != null) {
     const connector = CONNECTORS[web3State.walletId];
-    if (connector.switchChain) {
+    if (connector.switchChain != null) {
       await connector.switchChain(chainId);
     } else {
       throw new WalletError('Switching network failed.', {

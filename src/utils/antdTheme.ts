@@ -1,4 +1,4 @@
-import { ThemeConfig } from 'antd/es/config-provider/context';
+import { ThemeConfig } from 'antd';
 
 // See tokens: https://ant.design/docs/react/customize-theme
 

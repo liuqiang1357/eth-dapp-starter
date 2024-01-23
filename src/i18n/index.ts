@@ -8,7 +8,7 @@ const locales = import.meta.glob('./locales/**/*.json', { eager: true });
 
 for (const path of Object.keys(locales)) {
   const result = path.match(/^\.\/locales\/(?<language>[^/]+)\/(?<namespace>.*?)(\/index)?\.json$/);
-  if (result?.groups) {
+  if (result?.groups != null) {
     merge(resources, {
       [result.groups.language]: { [result.groups.namespace]: (locales[path] as any).default },
     });

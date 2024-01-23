@@ -22,12 +22,12 @@ export const ErrorHandlder: FC = () => {
 
   useEffect(() => {
     setTimeout(async () => {
-      if (lastError) {
+      if (lastError != null) {
         clearError(lastError);
         if (lastError instanceof BaseError) {
           if (lastError.expose) {
             const localMessage = lastError.getLocalMessage();
-            if (localMessage && pageVisible) {
+            if (localMessage !== '' && pageVisible) {
               if (!recentLocalMessages.current.includes(localMessage)) {
                 recentLocalMessages.current.push(localMessage);
                 message.error(localMessage);

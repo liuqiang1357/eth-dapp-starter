@@ -49,9 +49,9 @@ export const Button = forwardRef<ComponentRef<typeof AntButton>, Props>(
   ) => {
     let baseClassName = tw`inline-flex items-center justify-center no-underline`;
 
-    let finalType: AntButtonProps['type'];
     const finalDisabled = loading || disabled;
 
+    let finalType: AntButtonProps['type'];
     switch (type) {
       case 'unstyled':
         finalType = 'text';
