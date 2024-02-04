@@ -9,7 +9,7 @@ import { SUPPORTED_WALLET_IDS, WALLET_CONFIGS } from 'utils/configs';
 import { formatLongText } from 'utils/formatters';
 import { WalletId } from 'utils/models';
 import { tm } from 'utils/tailwind';
-import { CONNECTORS } from 'utils/web3';
+import { config, CONNECTORS } from 'utils/web3';
 import disconnectImage from './_images/disconnect.svg';
 
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
@@ -18,7 +18,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { walletsPopoverOpen } = useSnapshot(uiState);
 
   const handleConnectClick = async (walletId: WalletId) => {
-    await connect({ connector: CONNECTORS[walletId] });
+    await connect(config, { connector: CONNECTORS[walletId] });
     uiState.walletsPopoverOpen = false;
   };
 
@@ -34,7 +34,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
             className="absolute inset-0 h-auto opacity-0 group-hover:opacity-100"
             type="primary"
             danger
-            onClick={disconnect}
+            onClick={() => disconnect(config)}
           >
             <img src={disconnectImage} />
             <div className="ml-[10px]">Disconnect</div>

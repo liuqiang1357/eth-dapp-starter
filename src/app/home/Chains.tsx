@@ -1,10 +1,12 @@
+import { switchChain } from '@wagmi/core';
 import { App, Popover } from 'antd';
 import { ComponentProps, FC, useEffect } from 'react';
 import { useSnapshot } from 'valtio';
 import { Button } from 'app/_shared/Button';
-import { switchChain, web3State } from 'states/web3';
+import { web3State } from 'states/web3';
 import { CHAIN_CONFIGS, SUPPORTED_CHAIN_IDS } from 'utils/configs';
 import { tm } from 'utils/tailwind';
+import { config } from 'utils/web3';
 
 export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { chainId, walletChainId } = useSnapshot(web3State);
@@ -16,7 +18,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
       return message.info(
         <div className="inline-flex">
           <div>The wallet is not connected to {CHAIN_CONFIGS[chainId].name}.</div>
-          <Button className="ml-[10px] underline" onClick={() => switchChain(chainId)}>
+          <Button className="ml-[10px] underline" onClick={() => switchChain(config, { chainId })}>
             Switch to {CHAIN_CONFIGS[chainId].name}
           </Button>
         </div>,
@@ -36,7 +38,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
                   key={chainId}
                   className="justify-start"
                   type="default"
-                  onClick={() => switchChain(chainId)}
+                  onClick={() => switchChain(config, { chainId })}
                 >
                   <img className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} />
                   <div className="ml-[10px]">{CHAIN_CONFIGS[chainId].name}</div>

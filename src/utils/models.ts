@@ -6,11 +6,12 @@ export enum ChainId {
 export type ChainConfig = {
   name: string;
   icon: string;
+  nodeUrl: string;
 };
 
 export enum WalletId {
-  MetaMask = 'MetaMask',
-  WalletConnect = 'WalletConnect',
+  MetaMask = 'injected',
+  WalletConnect = 'walletConnect',
 }
 
 export type WalletConfig = {

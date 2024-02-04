@@ -19,7 +19,7 @@ export const Home: FC = () => {
     chainId != null && account != null && isAddress(address) ? { chainId, account, address } : null,
   );
 
-  const { mutateAsync: transfer, isLoading: sending } = useTransferErc20();
+  const { mutateAsync: transfer, isPending: sending } = useTransferErc20();
 
   const send = async () => {
     if (

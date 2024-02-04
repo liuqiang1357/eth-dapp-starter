@@ -1,7 +1,8 @@
-import { Hash, readContract, writeContract } from '@wagmi/core';
-import { Address } from 'viem';
+import { readContract, writeContract } from '@wagmi/core';
+import { Address, Hash } from 'viem';
 import erc20 from 'assets/abis/erc20';
 import { ChainId } from 'utils/models';
+import { config } from 'utils/web3';
 
 export type GetErc20RawBalanceParams = {
   chainId: ChainId;
@@ -10,7 +11,7 @@ export type GetErc20RawBalanceParams = {
 };
 
 export async function getErc20RawBalance(params: GetErc20RawBalanceParams): Promise<string> {
-  const balance = await readContract({
+  const balance = await readContract(config, {
     chainId: params.chainId,
     address: params.address,
     abi: erc20,
@@ -29,7 +30,7 @@ export type TransferErc20Params = {
 };
 
 export async function transferErc20(params: TransferErc20Params): Promise<Hash> {
-  const { hash } = await writeContract({
+  const hash = await writeContract(config, {
     chainId: params.chainId,
     account: params.account,
     address: params.address,
