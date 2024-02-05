@@ -22,7 +22,7 @@ export const App: FC = () => {
   }, []);
 
   return (
-    <AntApp className="flex min-h-0 grow flex-col">
+    <AntApp>
       <Routes>
         <Route index element={<Home />} />
         <Route path="*" element={<Navigate to="/" />} />
