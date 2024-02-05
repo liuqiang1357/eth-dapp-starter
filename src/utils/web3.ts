@@ -12,7 +12,7 @@ export const CHAINS: Record<ChainId, Chain> = {
 };
 
 export const CONNECTORS: Record<WalletId, CreateConnectorFn> = {
-  [WalletId.MetaMask]: injected({ shimDisconnect: true }),
+  [WalletId.MetaMask]: injected(),
   [WalletId.WalletConnect]: walletConnect({
     projectId: '6fc6f515daaa4b001616766bc028bffa',
   }),
