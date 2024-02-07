@@ -6,8 +6,8 @@ import { config } from 'utils/web3';
 
 export type GetErc20RawBalanceParams = {
   chainId: ChainId;
-  account: Address;
   address: Address;
+  account: Address;
 };
 
 export async function getErc20RawBalance(params: GetErc20RawBalanceParams): Promise<string> {
@@ -23,8 +23,8 @@ export async function getErc20RawBalance(params: GetErc20RawBalanceParams): Prom
 
 export type TransferErc20Params = {
   chainId: ChainId;
-  account: Address;
   address: Address;
+  account: Address;
   to: Address;
   rawAmount: string;
 };
@@ -32,8 +32,8 @@ export type TransferErc20Params = {
 export async function transferErc20(params: TransferErc20Params): Promise<Hash> {
   const hash = await writeContract(config, {
     chainId: params.chainId,
-    account: params.account,
     address: params.address,
+    account: params.account,
     abi: erc20,
     functionName: 'transfer',
     args: [params.to, BigInt(params.rawAmount)],
