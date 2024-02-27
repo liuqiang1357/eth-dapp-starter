@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   plugins: ['prettier-plugin-tailwindcss'],
   arrowParens: 'avoid',
   printWidth: 100,

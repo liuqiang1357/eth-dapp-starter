@@ -1,16 +1,18 @@
-# Editor
+# editor
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
 .idea
 
-# Dependencies
+# dependencies
 node_modules
 
-# Build
-dist
+# build
+.next
+next-env.d.ts
+tsconfig.tsbuildinfo
 
-# Logs
+# logs
 logs
 *.log
 npm-debug.log*
@@ -18,9 +20,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Local
+# local
 *.local
 
-# Misc
+# misc
 .DS_Store
-stats.html
