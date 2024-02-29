@@ -4,7 +4,6 @@ import { notifications } from '@mantine/notifications';
 import delay from 'delay';
 import { remove } from 'lodash-es';
 import { FC, useEffect, useRef } from 'react';
-import { usePageVisibility } from 'react-page-visibility';
 import { useSnapshot } from 'valtio';
 import { clearError, errorsState, syncErrorsState } from 'lib/states/errors';
 import { BaseError } from 'lib/utils/errors';
@@ -18,8 +17,6 @@ export const ErrorHandler: FC = () => {
     return syncErrorsState();
   }, []);
 
-  const pageVisible = usePageVisibility();
-
   useEffect(() => {
     setTimeout(async () => {
       if (lastError != null) {
@@ -27,7 +24,7 @@ export const ErrorHandler: FC = () => {
         if (lastError instanceof BaseError) {
           if (lastError.expose) {
             const localMessage = lastError.getLocalMessage();
-            if (localMessage !== '' && pageVisible) {
+            if (localMessage !== '') {
               if (!recentLocalMessages.current.includes(localMessage)) {
                 recentLocalMessages.current.push(localMessage);
                 notifications.show({ message: localMessage, color: 'red' });
@@ -43,7 +40,7 @@ export const ErrorHandler: FC = () => {
         console.error(lastError);
       }
     });
-  }, [lastError, pageVisible]);
+  }, [lastError]);
 
   return <></>;
 };

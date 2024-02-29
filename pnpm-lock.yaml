@@ -29,9 +29,6 @@ dependencies:
   '@wagmi/core':
     specifier: ^2.6.5
     version: 2.6.5(@types/react@18.2.58)(react@18.2.0)(typescript@5.3.3)(viem@2.7.14)
-  deepdash-es:
-    specifier: ^5.3.9
-    version: 5.3.9
   delay:
     specifier: ^6.0.0
     version: 6.0.0
@@ -5198,12 +5195,6 @@ packages:
   /deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
     dev: true
-
-  /deepdash-es@5.3.9:
-    resolution: {integrity: sha512-p/pFjNW8RgkWiTderYZpFA3yLo/ABjr2bR5ZSkT13nvpXIvrv66PYo31MAzaauJnU/kXwNpkiSR2kTLQbjhwJQ==}
-    dependencies:
-      lodash-es: 4.17.21
-    dev: false
 
   /deepmerge@4.3.1:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
