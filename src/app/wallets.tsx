@@ -4,7 +4,6 @@ import { Button, Popover } from '@mantine/core';
 import { connect, disconnect } from '@wagmi/core';
 import Image from 'next/image';
 import { ComponentProps, FC } from 'react';
-import { ReactSVG } from 'react-svg';
 import { useSnapshot } from 'valtio';
 import { uiState } from 'lib/states/ui';
 import { web3State } from 'lib/states/web3';
@@ -13,7 +12,7 @@ import { formatLongText } from 'lib/utils/formatters';
 import { WalletId } from 'lib/utils/models';
 import { tm } from 'lib/utils/tailwind';
 import { config, CONNECTORS } from 'lib/utils/web3';
-import disconnectImage from './images/disconnect.svg';
+import { Disconnect } from './images/disconnect';
 
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { walletId, account } = useSnapshot(web3State);
@@ -39,7 +38,7 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
             color="red"
             onClick={() => disconnect(config)}
           >
-            <ReactSVG src={disconnectImage.src} />
+            <Disconnect />
             <div className="ml-[10px]">Disconnect</div>
           </Button>
         </div>
