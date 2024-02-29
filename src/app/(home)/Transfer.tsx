@@ -1,13 +1,14 @@
 'use client';
 
 import { Button, Input } from '@mantine/core';
-import { FC, useState } from 'react';
+import { ComponentProps, FC, useState } from 'react';
 import { useSnapshot } from 'valtio';
 import { isAddress } from 'viem';
 import { useErc20RawBalance, useTransferErc20 } from 'lib/hooks/erc20';
 import { web3State } from 'lib/states/web3';
+import { tm } from 'lib/utils/tailwind';
 
-export const Transfer: FC = () => {
+export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const [address, setAddress] = useState('0x63B7b6272C2D6571C577c97902cA584dA96c64f1');
   const [to, setTo] = useState('');
   const [rawAmount, setRawAmount] = useState('');
@@ -33,7 +34,7 @@ export const Transfer: FC = () => {
   };
 
   return (
-    <div className="flex w-[600px] flex-col space-y-[20px] px-[40px]">
+    <div className={tm('flex w-[600px] flex-col space-y-[20px] px-[40px]', className)} {...rest}>
       <div className="flex items-center">
         <div>Account:</div>
         <div className="ml-[10px]">{account}</div>

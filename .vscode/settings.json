@@ -14,6 +14,6 @@
   "typescript.tsdk": "./node_modules/typescript/lib",
 
   // Extensions settings
-  "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName"],
+  "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName", "classNames"],
   "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
 }

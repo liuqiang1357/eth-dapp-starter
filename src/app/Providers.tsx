@@ -10,7 +10,7 @@ import { syncSettingsState } from 'lib/states/settings';
 import { syncWeb3State } from 'lib/states/web3';
 import { theme } from 'lib/utils/mantineTheme';
 import { queryClient } from 'lib/utils/queryClient';
-import { ErrorHandler } from './errorHandler';
+import { ErrorHandler } from './ErrorHandler';
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {

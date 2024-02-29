@@ -2,7 +2,8 @@ import { ColorSchemeScript } from '@mantine/core';
 import { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
 import 'styles/index.css';
-import { Providers } from './providers';
+import { Header } from './Header';
+import { Providers } from './Providers';
 
 export const metadata: Metadata = {
   title: 'Eth Dapp Starter',
@@ -20,7 +21,10 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
         />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Header />
+          {children}
+        </Providers>
       </body>
     </html>
   );

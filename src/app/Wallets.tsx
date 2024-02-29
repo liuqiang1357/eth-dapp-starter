@@ -12,7 +12,7 @@ import { formatLongText } from 'lib/utils/formatters';
 import { WalletId } from 'lib/utils/models';
 import { tm } from 'lib/utils/tailwind';
 import { config, CONNECTORS } from 'lib/utils/web3';
-import { Disconnect } from './images/disconnect';
+import { Disconnect } from './_images/disconnect';
 
 export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
   const { walletId, account } = useSnapshot(web3State);
