@@ -19,7 +19,7 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
       notifications.show({
         id: 'switch-chain',
         message: (
-          <div className="inline-flex">
+          <div className="flex">
             <div>The wallet is not connected to {CHAIN_CONFIGS[chainId].name}.</div>
             <Button
               className="ml-[10px] shrink-0 underline"
@@ -52,8 +52,8 @@ export const Chains: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
               {SUPPORTED_CHAIN_IDS.map(chainId => (
                 <Button
                   key={chainId}
-                  className="inline-flex justify-start"
                   variant="outline"
+                  justify="start"
                   onClick={() => switchChain(config, { chainId })}
                 >
                   <Image className="h-[16px] w-[16px]" src={CHAIN_CONFIGS[chainId].icon} alt="" />

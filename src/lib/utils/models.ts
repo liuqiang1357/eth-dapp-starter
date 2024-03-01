@@ -6,7 +6,6 @@ export enum ChainId {
 export type ChainConfig = {
   name: string;
   icon: any;
-  nodeUrl: string;
 };
 
 export enum WalletId {

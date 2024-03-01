@@ -11,12 +11,10 @@ export const CHAIN_CONFIGS: Record<ChainId, ChainConfig> = {
   [ChainId.PolygonMumbai]: {
     name: 'Polygon Mumbai',
     icon: polygon,
-    nodeUrl: 'https://rpc.ankr.com/polygon_mumbai',
   },
   [ChainId.ArbitrumOne]: {
     name: 'Arbitrum',
     icon: arbitrum,
-    nodeUrl: 'https://arb1.arbitrum.io/rpc',
   },
 };
 

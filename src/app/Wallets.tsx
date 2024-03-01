@@ -54,8 +54,8 @@ export const Wallets: FC<ComponentProps<'div'>> = ({ className, ...rest }) => {
               {SUPPORTED_WALLET_IDS.map(walletId => (
                 <Button
                   key={walletId}
-                  className="inline-flex justify-start"
                   variant="outline"
+                  justify="start"
                   onClick={() => handleConnectClick(walletId)}
                 >
                   <Image className="h-[16px] w-[16px]" src={WALLET_CONFIGS[walletId].icon} alt="" />

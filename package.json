@@ -22,6 +22,7 @@
     "@wagmi/core": "^2.6.5",
     "delay": "^6.0.0",
     "encoding": "^0.1.13",
+    "immer": "^10.0.3",
     "lodash-es": "^4.17.21",
     "next": "14.1.0",
     "pino-pretty": "^10.3.1",
