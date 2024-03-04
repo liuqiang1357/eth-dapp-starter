@@ -1,39 +1,37 @@
-import { proxy } from 'valtio';
-import { convertMaybeViemError } from 'lib/utils/web3';
+import { atom } from 'jotai';
+import { convertMaybeWagmiError } from 'lib/utils/wagmi';
 
-export const errorsState = proxy({
-  lastError: null as Error | null,
-});
+const lastErrorBaseAtom = atom<Error | null>(null);
 
-export function publishError(error: unknown): void {
-  const finalError = convertMaybeViemError(error);
-  if (finalError instanceof Error) {
-    errorsState.lastError = finalError;
-  }
-}
+export const lastErrorAtom = atom(
+  get => get(lastErrorBaseAtom),
+  (_, set, error: Error | null) => {
+    if (error != null) {
+      error = convertMaybeWagmiError(error);
+    }
+    set(lastErrorBaseAtom, error);
+  },
+);
 
-export function clearError(error: Error): void {
-  if (errorsState.lastError === error) {
-    errorsState.lastError = null;
-  }
-}
-
-export function syncErrorsState(): () => void {
+lastErrorAtom.onMount = setAtom => {
   const errorListener = (event: ErrorEvent) => {
-    event.preventDefault();
-    publishError(event.error);
+    if (event.error instanceof Error) {
+      event.preventDefault();
+      setAtom(event.error);
+    }
   };
+  window.addEventListener('error', errorListener);
 
   const rejectionListener = (event: PromiseRejectionEvent) => {
-    event.preventDefault();
-    publishError(event.reason);
+    if (event.reason instanceof Error) {
+      event.preventDefault();
+      setAtom(event.reason);
+    }
   };
-
-  window.addEventListener('error', errorListener);
   window.addEventListener('unhandledrejection', rejectionListener);
 
   return () => {
     window.removeEventListener('error', errorListener);
     window.removeEventListener('unhandledrejection', rejectionListener);
   };
-}
+};

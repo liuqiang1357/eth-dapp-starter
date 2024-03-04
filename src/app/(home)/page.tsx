@@ -1,8 +1,5 @@
-import { FC } from 'react';
-import { Transfer } from './Transfer';
+import { Transfer } from 'ui/home/Transfer';
 
-const Home: FC = () => {
-  return <Transfer className="mt-[10px]" />;
-};
-
-export default Home;
+export default function Page() {
+  return <Transfer className="pt-3" />;
+}

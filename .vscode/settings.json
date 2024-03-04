@@ -8,12 +8,11 @@
   "editor.quickSuggestions": { "strings": true },
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "explorer.sortOrderLexicographicOptions": "upper",
-  "files.associations": { "*.css": "tailwindcss" },
   "javascript.preferences.quoteStyle": "double",
   "typescript.preferences.quoteStyle": "double",
-  "typescript.tsdk": "./node_modules/typescript/lib",
 
   // Extensions settings
+  "eslint.workingDirectories": [{ "mode": "auto" }],
   "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName", "classNames"],
   "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
 }

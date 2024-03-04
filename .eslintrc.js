@@ -15,9 +15,13 @@ module.exports = {
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'plugin:@next/next/recommended',
+    'plugin:storybook/recommended',
     'plugin:prettier/recommended',
   ],
   plugins: ['import'],
+  parserOptions: {
+    sourceType: 'module',
+  },
   rules: {
     eqeqeq: ['error', 'always', { null: 'never' }],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
@@ -36,16 +40,10 @@ module.exports = {
   reportUnusedDisableDirectives: true,
   overrides: [
     {
-      files: ['*.mjs'],
-      parserOptions: {
-        sourceType: 'module',
-      },
-    },
-    {
       files: ['*.{ts,tsx}'],
       extends: ['plugin:@typescript-eslint/recommended'],
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.node.json'],
+        project: 'tsconfig.json',
         tsconfigRootDir: __dirname,
       },
       rules: {

@@ -2,32 +2,30 @@ import { ColorSchemeScript } from '@mantine/core';
 import { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
 import 'styles/index.css';
-import { Header } from './Header';
-import { Providers } from './Providers';
+import { fontsClassName } from 'lib/utils/fonts';
+import { Header } from 'ui/app/Header';
+import { Providers } from 'ui/app/Providers';
 
 export const metadata: Metadata = {
   title: 'Eth Dapp Starter',
 };
 
-const RootLayout: FC<{ children: ReactNode }> = ({ children }) => {
+const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <html lang="en">
       <head>
         <ColorSchemeScript />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
-        />
       </head>
-      <body>
+      <body className={fontsClassName}>
         <Providers>
-          <Header />
-          {children}
+          <div className="relative flex min-h-screen min-w-[1440px] flex-col">
+            <Header />
+            {children}
+          </div>
         </Providers>
       </body>
     </html>
   );
 };
 
-export default RootLayout;
+export default Layout;

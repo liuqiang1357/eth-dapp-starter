@@ -1,48 +1,35 @@
-import { getAccount, getChainId, reconnect, watchAccount, watchChainId } from '@wagmi/core';
-import { proxy } from 'valtio';
-import { Address } from 'viem';
-import { SUPPORTED_CHAIN_IDS, SUPPORTED_WALLET_IDS } from 'lib/utils/configs';
-import { WalletId } from 'lib/utils/models';
-import { config } from 'lib/utils/web3';
+import {
+  getAccount,
+  GetAccountReturnType,
+  getChainId,
+  watchAccount,
+  watchChainId,
+} from '@wagmi/core';
+import { atom } from 'jotai';
+import { SUPPORTED_CHAIN_IDS } from 'configs/chains';
+import { wagmiConfig } from 'lib/utils/wagmi';
 
-export const web3State = proxy({
-  walletId: null as WalletId | null,
-  walletChainId: null as number | null,
-  account: null as Address | null,
-  chainId: SUPPORTED_CHAIN_IDS[0],
-});
+const chainIdBaseAtom = atom(SUPPORTED_CHAIN_IDS[0]);
 
-export function syncWeb3State(): () => void {
-  reconnect(config);
-
-  const updateAccount = () => {
-    const account = getAccount(config);
-    web3State.walletId = SUPPORTED_WALLET_IDS.includes(account.connector?.id as WalletId)
-      ? (account.connector?.type as WalletId)
-      : null;
-    web3State.walletChainId =
-      web3State.walletId != null && account.chainId != null ? account.chainId : null;
-    web3State.account =
-      web3State.walletId != null && account.address != null ? account.address : null;
+chainIdBaseAtom.onMount = setAtom => {
+  const update = () => {
+    const chainId = getChainId(wagmiConfig);
+    setAtom(SUPPORTED_CHAIN_IDS.includes(chainId) ? chainId : SUPPORTED_CHAIN_IDS[0]);
   };
+  update();
+  return watchChainId(wagmiConfig, { onChange: update });
+};
 
-  updateAccount();
-  const accountDisposer = watchAccount(config, {
-    onChange: updateAccount,
-  });
+export const chainIdAtom = atom(get => get(chainIdBaseAtom));
 
-  const updateChainId = () => {
-    const chainId = getChainId(config);
-    web3State.chainId = SUPPORTED_CHAIN_IDS.includes(chainId) ? chainId : SUPPORTED_CHAIN_IDS[0];
-  };
+const getAccountResultAtom = atom<GetAccountReturnType | null>(null);
 
-  updateChainId();
-  const chainIdDisposer = watchChainId(config, {
-    onChange: updateChainId,
-  });
+getAccountResultAtom.onMount = setAtom => {
+  const update = () => setAtom(getAccount(wagmiConfig));
+  update();
+  return watchAccount(wagmiConfig, { onChange: update });
+};
 
-  return () => {
-    accountDisposer();
-    chainIdDisposer();
-  };
-}
+export const walletChainIdAtom = atom(get => get(getAccountResultAtom)?.chainId);
+
+export const accountAtom = atom(get => get(getAccountResultAtom)?.address);

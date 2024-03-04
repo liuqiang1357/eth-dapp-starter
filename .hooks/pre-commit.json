@@ -1,0 +1,3 @@
+{
+  "steps": [{ "name": "lint", "command": "pnpm tsc && pnpm lint-staged" }]
+}
