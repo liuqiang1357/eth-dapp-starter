@@ -1,6 +1,5 @@
 'use client';
 
-import { Button, Input } from '@mantine/core';
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { isAddress } from 'viem';
@@ -53,7 +52,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
         <div>Account:</div>
         <div className="ml-2">{account}</div>
       </div>
-      <Input
+      <input
         placeholder="Token address"
         value={address}
         onChange={event => setAddress(event.target.value)}
@@ -62,15 +61,15 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
         <div>Balance:</div>
         <div className="ml-2">{balance}</div>
       </div>
-      <Input placeholder="To" value={to} onChange={event => setTo(event.target.value)} />
-      <Input
+      <input placeholder="To" value={to} onChange={event => setTo(event.target.value)} />
+      <input
         placeholder="Amount"
         value={amount}
         onChange={event => setAmount(event.target.value)}
       />
-      <Button className="self-start" loading={transfering} onClick={transferToken}>
+      <button className="self-start" disabled={transfering} onClick={transferToken}>
         Send
-      </Button>
+      </button>
     </div>
   );
 };

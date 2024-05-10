@@ -1,6 +1,5 @@
 'use client';
 
-import { notifications } from '@mantine/notifications';
 import { useAtom } from 'jotai';
 import { FC, useEffect, useRef } from 'react';
 import { BaseError } from 'lib/errors/base';
@@ -21,7 +20,7 @@ export const ErrorHandler: FC = () => {
             if (recentMessages.current[lastError.message] !== true) {
               recentMessages.current[lastError.message] = true;
 
-              notifications.show({ message: lastError.message, color: 'red' });
+              // TODO
 
               setTimeout(() => {
                 delete recentMessages.current[lastError.message];

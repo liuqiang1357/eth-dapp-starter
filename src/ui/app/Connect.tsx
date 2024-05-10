@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@mantine/core';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { disconnect } from '@wagmi/core';
 import Image from 'next/image';
@@ -24,25 +23,17 @@ export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
                 (authenticationStatus == null || authenticationStatus === 'authenticated');
 
               if (!connected) {
-                return (
-                  <Button variant="outline" onClick={openConnectModal}>
-                    Connect wallet
-                  </Button>
-                );
+                return <button onClick={openConnectModal}>Connect wallet</button>;
               }
 
               if (chain.unsupported === true) {
-                return (
-                  <Button color="red" onClick={openChainModal}>
-                    Wrong network
-                  </Button>
-                );
+                return <button onClick={openChainModal}>Wrong network</button>;
               }
 
               return (
                 <>
                   {wagmiConfig.chains.length > 1 && (
-                    <Button onClick={openChainModal}>
+                    <button className="flex items-center" onClick={openChainModal}>
                       {chain.hasIcon && (
                         <div
                           className="size-5 rounded-full"
@@ -52,24 +43,24 @@ export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
                         </div>
                       )}
                       <div className="ml-2">{chain.name}</div>
-                    </Button>
+                    </button>
                   )}
 
                   <div className="group relative">
-                    <Button className="group-hover:opacity-0" variant="outline">
+                    <button className="flex items-center group-hover:opacity-0">
                       <AccountIcon address={account.address} size={20} />
                       <div className="ml-2">
                         {formatLongText(account.address, { headLength: 5 })}
                       </div>
-                    </Button>
-                    <Button
-                      className="absolute inset-0 h-auto opacity-0 group-hover:opacity-100"
+                    </button>
+                    <button
+                      className="absolute inset-0 flex h-auto items-center opacity-0 group-hover:opacity-100"
                       color="red"
                       onClick={() => disconnect(wagmiConfig)}
                     >
                       <Disconnect />
                       <div className="ml-2">Disconnect</div>
-                    </Button>
+                    </button>
                   </div>
                 </>
               );
