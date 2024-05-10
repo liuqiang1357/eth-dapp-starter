@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
-import 'styles/index.css';
+import 'styles/globals.css';
 import { fontsClassName } from 'lib/utils/fonts';
 import { Header } from 'ui/app/Header';
 import { Providers } from 'ui/app/Providers';

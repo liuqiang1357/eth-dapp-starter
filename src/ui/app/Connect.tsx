@@ -1,5 +1,6 @@
 'use client';
 
+import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { disconnect } from '@wagmi/core';
 import Image from 'next/image';
@@ -7,6 +8,7 @@ import { ComponentProps, FC } from 'react';
 import { formatLongText } from 'lib/utils/formatters';
 import { tm } from 'lib/utils/tailwind';
 import { wagmiConfig } from 'lib/utils/wagmi';
+import { Button } from 'ui/shadcn/button';
 import { Disconnect } from 'ui/svgs/Disconnect';
 import { AccountIcon } from './AccountIcon';
 
@@ -23,17 +25,25 @@ export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
                 (authenticationStatus == null || authenticationStatus === 'authenticated');
 
               if (!connected) {
-                return <button onClick={openConnectModal}>Connect wallet</button>;
+                return (
+                  <Button variant="outline" onClick={openConnectModal}>
+                    Connect wallet
+                  </Button>
+                );
               }
 
               if (chain.unsupported === true) {
-                return <button onClick={openChainModal}>Wrong network</button>;
+                return (
+                  <Button variant="destructive" onClick={openChainModal}>
+                    Wrong network
+                  </Button>
+                );
               }
 
               return (
                 <>
                   {wagmiConfig.chains.length > 1 && (
-                    <button className="flex items-center" onClick={openChainModal}>
+                    <Button className="flex items-center" onClick={openChainModal}>
                       {chain.hasIcon && (
                         <div
                           className="size-5 rounded-full"
@@ -43,24 +53,25 @@ export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
                         </div>
                       )}
                       <div className="ml-2">{chain.name}</div>
-                    </button>
+                    </Button>
                   )}
 
                   <div className="group relative">
-                    <button className="flex items-center group-hover:opacity-0">
+                    <Button variant="outline" className="flex items-center group-hover:opacity-0">
                       <AccountIcon address={account.address} size={20} />
                       <div className="ml-2">
                         {formatLongText(account.address, { headLength: 5 })}
                       </div>
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="destructive"
                       className="absolute inset-0 flex h-auto items-center opacity-0 group-hover:opacity-100"
                       color="red"
                       onClick={() => disconnect(wagmiConfig)}
                     >
                       <Disconnect />
                       <div className="ml-2">Disconnect</div>
-                    </button>
+                    </Button>
                   </div>
                 </>
               );

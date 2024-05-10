@@ -35,6 +35,7 @@ module.exports = {
         pathGroupsExcludedImportTypes: [],
       },
     ],
+    'react/prop-types': 'off',
     'react/self-closing-comp': 'error',
   },
   reportUnusedDisableDirectives: true,

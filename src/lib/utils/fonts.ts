@@ -1,8 +1,8 @@
-import { Manrope, Roboto_Mono } from 'next/font/google';
+import { Roboto_Mono as FontMono, Manrope as FontSans } from 'next/font/google';
 import { tm } from './tailwind';
 
-const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
+const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' });
 
-const robotoMono = Roboto_Mono({ subsets: ['latin'], variable: '--font-roboto-mono' });
+const fontMono = FontMono({ subsets: ['latin'], variable: '--font-mono' });
 
-export const fontsClassName = tm(manrope.className, manrope.variable, robotoMono.variable);
+export const fontsClassName = tm(fontSans.className, fontSans.variable, fontMono.variable);

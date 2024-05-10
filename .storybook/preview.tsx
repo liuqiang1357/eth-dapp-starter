@@ -1,5 +1,5 @@
 import { Preview } from '@storybook/react';
-import 'styles/index.css';
+import 'styles/globals.css';
 import { fontsClassName } from 'lib/utils/fonts';
 import { Providers } from 'ui/app/Providers';
 
