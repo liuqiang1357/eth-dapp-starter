@@ -20,6 +20,21 @@ export async function getTokenDecimals(params: GetTokenDecimalsParams): Promise<
   return decimals;
 }
 
+export type GetTokenSymbolParams = {
+  chainId: ChainId;
+  address: Address;
+};
+
+export async function getTokenSymbol(params: GetTokenDecimalsParams): Promise<string> {
+  const symbol = await readContract(wagmiConfig, {
+    chainId: params.chainId,
+    address: params.address,
+    abi: IERC20Abi,
+    functionName: 'symbol',
+  });
+  return symbol;
+}
+
 export type GetTokenBalanceParams = {
   chainId: ChainId;
   account: Address;

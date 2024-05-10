@@ -6,6 +6,8 @@ import {
   GetTokenBalanceParams,
   getTokenDecimals,
   GetTokenDecimalsParams,
+  getTokenSymbol,
+  GetTokenSymbolParams,
   transferToken,
   TransferTokenParams,
 } from 'lib/apis/tokens';
@@ -17,6 +19,18 @@ export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
     queryFn: async () => {
       invariant(params != null);
       return await getTokenDecimals(params);
+    },
+    staleTime: Infinity,
+    enabled: params != null,
+  });
+}
+
+export function useTokenSymbol(params: GetTokenSymbolParams | null) {
+  return useQuery({
+    queryKey: ['TokenSymbol', params],
+    queryFn: async () => {
+      invariant(params != null);
+      return await getTokenSymbol(params);
     },
     staleTime: Infinity,
     enabled: params != null,

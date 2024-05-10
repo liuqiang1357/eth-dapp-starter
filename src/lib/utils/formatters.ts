@@ -160,6 +160,25 @@ export function formatNumber(
   return `${approx}${sign}${symbols[0]}${digits}${compactSuffix}${percent}${symbols[1]}`;
 }
 
+export type FormatAmountOptions = FormatNumberOptions & {
+  exact?: boolean;
+};
+
+export function formatAmount(
+  amount: string | null | undefined,
+  { exact = false, ...options }: FormatAmountOptions = {},
+): string {
+  return formatNumber(amount, {
+    lowerLimit: exact ? null : 1e-8,
+    upperLimit: exact ? null : 1e18,
+    precision: exact ? null : 8,
+    decimals: exact ? null : 8,
+    useGroupSeparator: exact ? false : undefined,
+    defaultText: exact ? '' : undefined,
+    ...options,
+  });
+}
+
 export type FormatLongTextOptions = {
   headTailLength?: number;
   headLength?: number;
