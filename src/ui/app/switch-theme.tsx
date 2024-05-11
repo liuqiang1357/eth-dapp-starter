@@ -3,7 +3,7 @@
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { ComponentProps, FC } from 'react';
-import { tm } from 'lib/utils/tailwind';
+import { cn } from 'lib/utils/shadcn';
 import { Button } from 'ui/shadcn/button';
 import {
   DropdownMenu,
@@ -16,7 +16,7 @@ export const SwitchTheme: FC<ComponentProps<'div'>> = ({ className, ...props }) 
   const { setTheme } = useTheme();
 
   return (
-    <div className={tm('inline-block', className)} {...props}>
+    <div className={cn('inline-block', className)} {...props}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">

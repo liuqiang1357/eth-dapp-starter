@@ -1,8 +1,6 @@
 {
   // Built-in settings
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
+  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.quickSuggestions": { "strings": true },
@@ -14,5 +12,9 @@
   // Extensions settings
   "eslint.workingDirectories": [{ "mode": "auto" }],
   "tailwindCSS.classAttributes": ["class", "className", ".*Class", ".*ClassName", "classNames"],
-  "tailwindCSS.experimental.classRegex": ["tw`([^`]*)"]
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ]
 }

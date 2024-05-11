@@ -7,7 +7,7 @@ const foldersUnderSrc = fs
 
 module.exports = {
   root: true,
-  env: { browser: true, node: true, es2020: true },
+  env: { node: true, es2020: true },
   extends: [
     'eslint:recommended',
     'plugin:@tanstack/query/recommended',
@@ -18,14 +18,12 @@ module.exports = {
     'plugin:storybook/recommended',
     'plugin:prettier/recommended',
   ],
-  plugins: ['import'],
-  parserOptions: {
-    sourceType: 'module',
-  },
+  plugins: ['filenames', 'import'],
   rules: {
     eqeqeq: ['error', 'always', { null: 'never' }],
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     'sort-imports': ['error', { ignoreDeclarationSort: true, ignoreCase: true }],
+    'filenames/match-regex': ['error', '^[0-9a-z-.]+$'],
     'import/order': [
       'error',
       {
@@ -38,14 +36,12 @@ module.exports = {
     'react/prop-types': 'off',
     'react/self-closing-comp': 'error',
   },
-  reportUnusedDisableDirectives: true,
   overrides: [
     {
       files: ['*.{ts,tsx}'],
       extends: ['plugin:@typescript-eslint/recommended'],
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir: __dirname,
       },
       rules: {
         '@typescript-eslint/no-explicit-any': 'off',
@@ -57,6 +53,6 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['!.*', 'node_modules', '.next'],
   settings: { react: { version: 'detect' } },
+  reportUnusedDisableDirectives: true,
 };

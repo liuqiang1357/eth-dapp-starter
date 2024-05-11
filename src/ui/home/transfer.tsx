@@ -12,7 +12,7 @@ import {
 } from 'lib/hooks/tokens';
 import { accountAtom, chainIdAtom } from 'lib/states/web3';
 import { formatAmount } from 'lib/utils/formatters';
-import { tm } from 'lib/utils/tailwind';
+import { cn } from 'lib/utils/shadcn';
 import { Button } from 'ui/shadcn/button';
 import { Input } from 'ui/shadcn/input';
 
@@ -59,7 +59,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
   }, [chainId]);
 
   return (
-    <div className={tm('container', className)} {...props}>
+    <div className={cn('container', className)} {...props}>
       <div className="grid w-[40rem] grid-cols-[auto_1fr] items-center gap-4">
         <div>Account:</div>
         <div>{account}</div>

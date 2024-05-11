@@ -6,7 +6,7 @@ import { disconnect } from '@wagmi/core';
 import Image from 'next/image';
 import { ComponentProps, FC } from 'react';
 import { formatLongText } from 'lib/utils/formatters';
-import { tm } from 'lib/utils/tailwind';
+import { cn } from 'lib/utils/shadcn';
 import { wagmiConfig } from 'lib/utils/wagmi';
 import { Button } from 'ui/shadcn/button';
 import { Disconnect } from 'ui/svgs/disconnect';
@@ -17,7 +17,7 @@ export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
     <ConnectButton.Custom>
       {({ account, chain, authenticationStatus, openChainModal, openConnectModal }) => {
         return (
-          <div className={tm('inline-flex space-x-4', className)} {...props}>
+          <div className={cn('inline-flex space-x-4', className)} {...props}>
             {(() => {
               const connected =
                 account != null &&
