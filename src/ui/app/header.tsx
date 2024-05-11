@@ -3,7 +3,7 @@
 import { ComponentProps, FC } from 'react';
 import { tm } from 'lib/utils/tailwind';
 import { Connect } from './connect';
-import { Theme } from './theme';
+import { SwitchTheme } from './switch-theme';
 
 export const Header: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   return (
@@ -12,7 +12,7 @@ export const Header: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
 
       <div className="flex">
         <Connect />
-        <Theme className="ml-4" />
+        <SwitchTheme className="ml-4" />
       </div>
     </div>
   );
