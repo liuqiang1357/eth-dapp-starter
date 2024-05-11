@@ -1,7 +1,7 @@
 import { readContract, writeContract } from '@wagmi/core';
 import { Address, Hash } from 'viem';
 import { ChainId } from 'configs/chains';
-import { IERC20Abi } from 'lib/abis/IERC20';
+import { IERC20Abi } from 'lib/abis/ierc20';
 import { amountToRawAmount, rawAmountToAmount } from 'lib/utils/misc';
 import { wagmiConfig } from 'lib/utils/wagmi';
 

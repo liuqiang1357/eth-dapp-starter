@@ -9,8 +9,8 @@ import { formatLongText } from 'lib/utils/formatters';
 import { tm } from 'lib/utils/tailwind';
 import { wagmiConfig } from 'lib/utils/wagmi';
 import { Button } from 'ui/shadcn/button';
-import { Disconnect } from 'ui/svgs/Disconnect';
-import { AccountIcon } from './AccountIcon';
+import { Disconnect } from 'ui/svgs/disconnect';
+import { AccountIcon } from './account-icon';
 
 export const Connect: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   return (

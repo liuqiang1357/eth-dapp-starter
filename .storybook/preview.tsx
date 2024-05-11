@@ -1,7 +1,7 @@
 import { Preview } from '@storybook/react';
-import 'styles/globals.css';
+import 'styles/global.css';
 import { fontsClassName } from 'lib/utils/fonts';
-import { Providers } from 'ui/app/Providers';
+import { Providers } from 'ui/app/providers';
 
 const preview: Preview = {
   parameters: {

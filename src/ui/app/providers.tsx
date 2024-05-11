@@ -7,11 +7,11 @@ import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { FC, ReactNode } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { store } from 'lib/utils/jotai';
-import { queryClient } from 'lib/utils/reactQuery';
+import { queryClient } from 'lib/utils/react-query';
 import { wagmiConfig } from 'lib/utils/wagmi';
 import { Toaster } from 'ui/shadcn/toaster';
-import { ErrorHandler } from './ErrorHandler';
-import { RainbowKitProvider } from './RainbowKitProvider';
+import { ErrorHandler } from './error-handler';
+import { RainbowKitProvider } from './rainbowkit-provider';
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (

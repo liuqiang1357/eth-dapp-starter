@@ -2,8 +2,8 @@
 
 import { ComponentProps, FC } from 'react';
 import { tm } from 'lib/utils/tailwind';
-import { Connect } from './Connect';
-import { Theme } from './Theme';
+import { Connect } from './connect';
+import { Theme } from './theme';
 
 export const Header: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   return (

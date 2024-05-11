@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
-import 'styles/globals.css';
+import 'styles/global.css';
 import { fontsClassName } from 'lib/utils/fonts';
-import { Header } from 'ui/app/Header';
-import { Providers } from 'ui/app/Providers';
+import { Header } from 'ui/app/header';
+import { Providers } from 'ui/app/providers';
 
 export const metadata: Metadata = {
   title: 'Eth Dapp Starter',
