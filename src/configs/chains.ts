@@ -12,3 +12,10 @@ export type ChainMap<T> = Record<ChainId, T>;
 export const SUPPORTED_CHAIN_IDS = TARGET_MAINNET
   ? [ChainId.Mainnet, ChainId.Arbitrum]
   : [ChainId.Sepolia, ChainId.Goerli];
+
+export const CHAIN_NAMES: ChainMap<string> = {
+  [ChainId.Mainnet]: 'Mainnet',
+  [ChainId.Arbitrum]: 'Arbitrum',
+  [ChainId.Sepolia]: 'Sepolia',
+  [ChainId.Goerli]: 'Goerli',
+};
