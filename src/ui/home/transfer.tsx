@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { isAddress } from 'viem';
 import { WETH_ADDRESSES } from 'configs/addresses';
+import { ChainId } from 'configs/chains';
 import {
   useTokenBalance,
   useTokenDecimals,
@@ -19,20 +20,29 @@ import { Input } from 'ui/shadcn/input';
 export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   const account = useAtomValue(accountAtom);
 
-  const [address, setAddress] = useState('');
-
   const chainId = useAtomValue(chainIdAtom);
 
+  const [addressChainId, setAddressChainId] = useState<ChainId | null>(null);
+
+  const [address, setAddress] = useState('');
+
+  const changeAddress = (text: string) => {
+    setAddressChainId(chainId);
+    setAddress(text);
+  };
+
   const { data: balance } = useTokenBalance(
-    chainId != null && account != null && isAddress(address) ? { chainId, account, address } : null,
+    chainId === addressChainId && account != null && isAddress(address)
+      ? { chainId, account, address }
+      : null,
   );
 
   const { data: symbol } = useTokenSymbol(
-    chainId != null && isAddress(address) ? { chainId, address } : null,
+    chainId === addressChainId && isAddress(address) ? { chainId, address } : null,
   );
 
   const { data: decimals } = useTokenDecimals(
-    chainId != null && isAddress(address) ? { chainId, address } : null,
+    chainId === addressChainId && isAddress(address) ? { chainId, address } : null,
   );
 
   const [to, setTo] = useState('');
@@ -43,7 +53,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
 
   const transferToken = async () => {
     if (
-      chainId != null &&
+      chainId === addressChainId &&
       account != null &&
       isAddress(address) &&
       decimals != null &&
@@ -55,17 +65,18 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
   };
 
   useEffect(() => {
+    setAddressChainId(chainId);
     setAddress(WETH_ADDRESSES[chainId] ?? '');
   }, [chainId]);
 
   return (
-    <div className={cn('container', className)} {...props}>
+    <div className={cn('', className)} {...props}>
       <div className="grid w-[40rem] grid-cols-[auto_1fr] items-center gap-4">
         <div>Account:</div>
         <div>{account}</div>
 
         <div>Token:</div>
-        <Input value={address} onChange={event => setAddress(event.target.value)} />
+        <Input value={address} onChange={event => changeAddress(event.target.value)} />
 
         <div>Balance:</div>
         <div>
