@@ -2,8 +2,8 @@ import { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config: Config = {
-  darkMode: 'class',
-  content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'selector',
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './.storybook/**/*.{js,jsx,ts,tsx}'],
   theme: {
     container: {
       center: true,
