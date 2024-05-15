@@ -1,5 +1,6 @@
 import { Chain, getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { arbitrum, goerli, mainnet, sepolia } from '@wagmi/chains';
+import { produce } from 'immer';
 import {
   BaseError as ViemBaseError,
   ChainMismatchError as ViemChainMismatchError,
@@ -11,7 +12,10 @@ import { ChainMismatchError, UnknownWeb3Error, UserRejectedRequestError } from '
 const CHAINS: ChainMap<Chain> = {
   [ChainId.Mainnet]: mainnet,
   [ChainId.Arbitrum]: arbitrum,
-  [ChainId.Sepolia]: sepolia,
+  [ChainId.Sepolia]: produce(sepolia, chain => {
+    chain.rpcUrls.default.http[0] =
+      'https://sepolia.infura.io/v3/006c057c342d4476b6befdba551e7fd3' as any;
+  }),
   [ChainId.Goerli]: goerli,
 };
 
