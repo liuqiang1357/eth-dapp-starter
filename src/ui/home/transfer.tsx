@@ -89,7 +89,11 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
         <div>Amount:</div>
         <Input value={amount} onChange={event => setAmount(event.target.value)} />
 
-        <Button className="place-self-start" loading={transfering} onClick={transferToken}>
+        <Button
+          className="col-span-2 place-self-start"
+          loading={transfering}
+          onClick={transferToken}
+        >
           Send
         </Button>
       </div>
