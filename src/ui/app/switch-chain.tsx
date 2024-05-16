@@ -30,7 +30,7 @@ export const SwitchChain: FC<ComponentProps<'div'>> = ({ className, ...props }) 
             <Button variant="outline">{CHAIN_NAMES[chainId]}</Button>
           )}
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="start">
           {SUPPORTED_CHAIN_IDS.map(chainId => (
             <DropdownMenuItem key={chainId} onClick={() => switchChain(wagmiConfig, { chainId })}>
               {CHAIN_NAMES[chainId]}
