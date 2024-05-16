@@ -25,7 +25,7 @@ export const ErrorHandler: FC = () => {
 
               setTimeout(() => {
                 delete recentMessages.current[lastError.message];
-              }, 3000);
+              }, 1000);
             }
           }
         });
