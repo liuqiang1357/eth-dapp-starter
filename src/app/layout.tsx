@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={fontsClassName}>
         <Providers>
           <div className="flex min-h-screen min-w-[1440px] flex-col">
