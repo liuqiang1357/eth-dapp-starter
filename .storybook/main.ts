@@ -8,6 +8,7 @@ import { StorybookConfig } from '@storybook/nextjs';
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, 'package.json')));
 }
+
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -23,4 +24,5 @@ const config: StorybookConfig = {
     autodocs: 'tag',
   },
 };
+
 export default config;

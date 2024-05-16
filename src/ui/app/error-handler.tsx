@@ -2,16 +2,14 @@
 
 import { useAtom } from 'jotai';
 import { FC, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { BaseError } from 'lib/errors/base';
 import { lastErrorAtom } from 'lib/states/errors';
-import { useToast } from 'ui/shadcn/use-toast';
 
 export const ErrorHandler: FC = () => {
   const [lastError, setLastError] = useAtom(lastErrorAtom);
 
   const recentMessages = useRef<Partial<Record<string, boolean>>>({});
-
-  const { toast } = useToast();
 
   useEffect(() => {
     if (lastError != null) {
@@ -23,7 +21,7 @@ export const ErrorHandler: FC = () => {
             if (recentMessages.current[lastError.message] !== true) {
               recentMessages.current[lastError.message] = true;
 
-              toast({ variant: 'destructive', description: lastError.message });
+              toast.error(lastError.message);
 
               setTimeout(() => {
                 delete recentMessages.current[lastError.message];
@@ -36,7 +34,7 @@ export const ErrorHandler: FC = () => {
         console.error(lastError);
       }
     }
-  }, [lastError, setLastError, toast]);
+  }, [lastError, setLastError]);
 
   return null;
 };

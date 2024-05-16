@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import 'styles/index.css';
 import { fontsClassName } from 'lib/utils/fonts';
 import { Header } from 'ui/app/header';
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Eth Dapp Starter',
 };
 
-const Layout: FC<{ children: ReactNode }> = ({ children }) => {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={fontsClassName}>
@@ -22,6 +22,4 @@ const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       </body>
     </html>
   );
-};
-
-export default Layout;
+}

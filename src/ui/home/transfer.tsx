@@ -70,33 +70,30 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
   }, [chainId]);
 
   return (
-    <div className={cn('', className)} {...props}>
-      <div className="grid w-[40rem] grid-cols-[auto_1fr] items-center gap-4">
-        <div>Account:</div>
-        <div>{account}</div>
+    <div
+      className={cn('grid w-[40rem] grid-cols-[auto_1fr] items-center gap-4', className)}
+      {...props}
+    >
+      <div>Account:</div>
+      <div>{account}</div>
 
-        <div>Token:</div>
-        <Input value={address} onChange={event => changeAddress(event.target.value)} />
+      <div>Token:</div>
+      <Input value={address} onChange={event => changeAddress(event.target.value)} />
 
-        <div>Balance:</div>
-        <div>
-          {formatAmount(balance)} {symbol}
-        </div>
-
-        <div>To:</div>
-        <Input value={to} onChange={event => setTo(event.target.value)} />
-
-        <div>Amount:</div>
-        <Input value={amount} onChange={event => setAmount(event.target.value)} />
-
-        <Button
-          className="col-span-2 place-self-start"
-          loading={transfering}
-          onClick={transferToken}
-        >
-          Send
-        </Button>
+      <div>Balance:</div>
+      <div>
+        {formatAmount(balance)} {symbol}
       </div>
+
+      <div>To:</div>
+      <Input value={to} onChange={event => setTo(event.target.value)} />
+
+      <div>Amount:</div>
+      <Input value={amount} onChange={event => setAmount(event.target.value)} />
+
+      <Button className="col-span-2 place-self-start" loading={transfering} onClick={transferToken}>
+        Send
+      </Button>
     </div>
   );
 };

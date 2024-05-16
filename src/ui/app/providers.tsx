@@ -9,7 +9,7 @@ import { WagmiProvider } from 'wagmi';
 import { store } from 'lib/utils/jotai';
 import { queryClient } from 'lib/utils/react-query';
 import { wagmiConfig } from 'lib/utils/wagmi';
-import { Toaster } from 'ui/shadcn/toaster';
+import { Toaster } from 'ui/shadcn/sonner';
 import { ErrorHandler } from './error-handler';
 import { RainbowKitProvider } from './rainbowkit-provider';
 
