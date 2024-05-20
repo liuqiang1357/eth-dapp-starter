@@ -1,6 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { waitForTransactionReceipt } from '@wagmi/core';
-import invariant from 'tiny-invariant';
 import {
   getTokenBalance,
   GetTokenBalanceParams,
@@ -16,24 +15,26 @@ import { wagmiConfig } from 'lib/utils/wagmi';
 export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
   return useQuery({
     queryKey: ['TokenDecimals', params],
-    queryFn: async () => {
-      invariant(params != null);
-      return await getTokenDecimals(params);
-    },
+    queryFn:
+      params != null
+        ? async () => {
+            return await getTokenDecimals(params);
+          }
+        : skipToken,
     staleTime: Infinity,
-    enabled: params != null,
   });
 }
 
 export function useTokenSymbol(params: GetTokenSymbolParams | null) {
   return useQuery({
     queryKey: ['TokenSymbol', params],
-    queryFn: async () => {
-      invariant(params != null);
-      return await getTokenSymbol(params);
-    },
+    queryFn:
+      params != null
+        ? async () => {
+            return await getTokenSymbol(params);
+          }
+        : skipToken,
     staleTime: Infinity,
-    enabled: params != null,
   });
 }
 
@@ -46,11 +47,12 @@ export function useTokenBalance(params: UseTokenBalanceParams | null) {
   const getTokenBalanceParams = params != null && decimals != null ? { ...params, decimals } : null;
   return useQuery({
     queryKey: ['TokenBalance', getTokenBalanceParams],
-    queryFn: async () => {
-      invariant(getTokenBalanceParams != null);
-      return await getTokenBalance(getTokenBalanceParams);
-    },
-    enabled: getTokenBalanceParams != null,
+    queryFn:
+      getTokenBalanceParams != null
+        ? async () => {
+            return await getTokenBalance(getTokenBalanceParams);
+          }
+        : skipToken,
   });
 }
 

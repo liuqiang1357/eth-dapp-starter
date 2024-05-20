@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { format, formatDistanceToNowStrict, toDate } from 'date-fns';
 import invariant from 'tiny-invariant';
 import UString from 'uni-string';
 
@@ -40,7 +41,7 @@ export function formatNumber(
     roundingMode = 'half-up',
     useGroupSeparator = true,
     trimTrailingZero = true,
-    defaultText = '--',
+    defaultText = '-',
   }: FormatNumberOptions = {},
 ): string {
   if (number == null) {
@@ -160,25 +161,6 @@ export function formatNumber(
   return `${approx}${sign}${symbols[0]}${digits}${compactSuffix}${percent}${symbols[1]}`;
 }
 
-export type FormatAmountOptions = FormatNumberOptions & {
-  exact?: boolean;
-};
-
-export function formatAmount(
-  amount: string | null | undefined,
-  { exact = false, ...options }: FormatAmountOptions = {},
-): string {
-  return formatNumber(amount, {
-    lowerLimit: exact ? null : 1e-8,
-    upperLimit: exact ? null : 1e18,
-    precision: exact ? null : 8,
-    decimals: exact ? null : 8,
-    useGroupSeparator: exact ? false : undefined,
-    defaultText: exact ? '' : undefined,
-    ...options,
-  });
-}
-
 export type FormatLongTextOptions = {
   headTailLength?: number;
   headLength?: number;
@@ -192,7 +174,7 @@ export function formatLongText(
     headTailLength = 8,
     headLength = headTailLength,
     tailLength = headTailLength,
-    defaultText = '--',
+    defaultText = '-',
   }: FormatLongTextOptions = {},
 ): string {
   if (text == null) {
@@ -204,4 +186,32 @@ export function formatLongText(
     return ustring.toString();
   }
   return `${ustring.slice(0, headLength).toString()}...${ustring.slice(ustring.charLength - tailLength).toString()}`;
+}
+
+export type FormatTimeOptions = {
+  short?: boolean;
+};
+
+export function formatTime(
+  value: string | number | null | undefined,
+  { short = false }: FormatTimeOptions = {},
+): string {
+  if (value == null) {
+    return '-';
+  }
+  return format(toDate(value), short ? 'yyyy-dd-MM HH:mm:ss' : "MMM dd yyyy HH:mm:ss a xxx 'UTC'");
+}
+
+export type FormatTimeFromNowOptions = {
+  useSuffix?: boolean;
+};
+
+export function formatTimeFromNow(
+  value: string | number | null | undefined,
+  { useSuffix = true }: FormatTimeFromNowOptions = {},
+): string {
+  if (value == null) {
+    return '-';
+  }
+  return formatDistanceToNowStrict(toDate(value), { addSuffix: useSuffix });
 }

@@ -7,7 +7,7 @@ import {
   UserRejectedRequestError as ViemUserRejectedRequestError,
 } from 'viem';
 import { ChainId, ChainMap, SUPPORTED_CHAIN_IDS } from 'configs/chains';
-import { ChainMismatchError, UnknownWeb3Error, UserRejectedRequestError } from 'lib/errors/web3';
+import { ChainMismatchError, UserRejectedRequestError, Web3Error } from 'lib/errors/web3';
 
 const CHAINS: ChainMap<Chain> = {
   [ChainId.Mainnet]: mainnet,
@@ -34,7 +34,7 @@ export function convertMaybeWagmiError(error: Error): Error {
     if (error instanceof ViemChainMismatchError) {
       return new ChainMismatchError(error.shortMessage, { cause: error });
     }
-    return new UnknownWeb3Error(error.shortMessage, { cause: error });
+    return new Web3Error(error.shortMessage, { cause: error });
   }
   return error;
 }

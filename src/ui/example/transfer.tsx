@@ -12,7 +12,7 @@ import {
   useTransferToken,
 } from 'lib/hooks/tokens';
 import { accountAtom, chainIdAtom } from 'lib/states/web3';
-import { formatAmount } from 'lib/utils/formatters';
+import { formatNumber } from 'lib/utils/formatters';
 import { cn } from 'lib/utils/shadcn';
 import { Button } from 'ui/shadcn/button';
 import { Input } from 'ui/shadcn/input';
@@ -82,7 +82,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
 
       <div>Balance:</div>
       <div>
-        {formatAmount(balance)} {symbol}
+        {formatNumber(balance)} {symbol}
       </div>
 
       <div>To:</div>

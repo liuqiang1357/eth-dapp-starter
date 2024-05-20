@@ -6,6 +6,7 @@ import { store } from './jotai';
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      refetchOnWindowFocus: false,
       staleTime: 60_000,
       retryDelay: 0,
       queryKeyHashFn: stringify,
