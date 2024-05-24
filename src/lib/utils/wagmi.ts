@@ -14,7 +14,7 @@ const CHAINS: ChainMap<Chain> = {
   [ChainId.Arbitrum]: arbitrum,
   [ChainId.Sepolia]: produce(sepolia, chain => {
     chain.rpcUrls.default.http[0] =
-      'https://sepolia.infura.io/v3/006c057c342d4476b6befdba551e7fd3' as any;
+      'https://sepolia.infura.io/v3/006c057c342d4476b6befdba551e7fd3' as never;
   }),
   [ChainId.Goerli]: goerli,
 };
