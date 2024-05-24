@@ -5,9 +5,9 @@ export enum Target {
   TestNet = 'testnet',
 }
 
-export const TARGET = $enum(Target).asValueOrDefault(
+export const target = $enum(Target).asValueOrDefault(
   process.env.NEXT_PUBLIC_TARGET,
   Target.MainNet,
 );
 
-export const TARGET_MAINNET = TARGET === Target.MainNet;
+export const targetMainnet = target === Target.MainNet;

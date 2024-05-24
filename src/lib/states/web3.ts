@@ -6,15 +6,15 @@ import {
   watchChainId,
 } from '@wagmi/core';
 import { atom } from 'jotai';
-import { SUPPORTED_CHAIN_IDS } from 'configs/chains';
+import { supportedChainIds } from 'configs/chains';
 import { wagmiConfig } from 'lib/utils/wagmi';
 
-const chainIdBaseAtom = atom(SUPPORTED_CHAIN_IDS[0]);
+const chainIdBaseAtom = atom(supportedChainIds[0]);
 
 chainIdBaseAtom.onMount = setAtom => {
   const update = () => {
     const chainId = getChainId(wagmiConfig);
-    setAtom(SUPPORTED_CHAIN_IDS.includes(chainId) ? chainId : SUPPORTED_CHAIN_IDS[0]);
+    setAtom(supportedChainIds.includes(chainId) ? chainId : supportedChainIds[0]);
   };
   update();
   return watchChainId(wagmiConfig, { onChange: update });

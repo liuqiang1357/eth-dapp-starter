@@ -6,10 +6,10 @@ import {
   ChainMismatchError as ViemChainMismatchError,
   UserRejectedRequestError as ViemUserRejectedRequestError,
 } from 'viem';
-import { ChainId, ChainMap, SUPPORTED_CHAIN_IDS } from 'configs/chains';
+import { ChainId, ChainMap, supportedChainIds } from 'configs/chains';
 import { ChainMismatchError, UserRejectedRequestError, Web3Error } from 'lib/errors/web3';
 
-const CHAINS: ChainMap<Chain> = {
+const chains: ChainMap<Chain> = {
   [ChainId.Mainnet]: mainnet,
   [ChainId.Arbitrum]: arbitrum,
   [ChainId.Sepolia]: produce(sepolia, chain => {
@@ -22,7 +22,7 @@ const CHAINS: ChainMap<Chain> = {
 export const wagmiConfig = getDefaultConfig({
   appName: 'OpenSwap',
   projectId: '6fc6f515daaa4b001616766bc028bffa',
-  chains: SUPPORTED_CHAIN_IDS.map(chainId => CHAINS[chainId]) as [Chain, ...Chain[]],
+  chains: supportedChainIds.map(chainId => chains[chainId]) as [Chain, ...Chain[]],
   ssr: true,
 });
 

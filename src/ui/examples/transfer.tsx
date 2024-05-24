@@ -3,7 +3,7 @@
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { isAddress } from 'viem';
-import { WETH_ADDRESSES } from 'configs/addresses';
+import { wethAddresses } from 'configs/addresses';
 import { ChainId } from 'configs/chains';
 import {
   useTokenBalance,
@@ -66,7 +66,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
 
   useEffect(() => {
     setAddressChainId(chainId);
-    setAddress(WETH_ADDRESSES[chainId] ?? '');
+    setAddress(wethAddresses[chainId] ?? '');
   }, [chainId]);
 
   return (

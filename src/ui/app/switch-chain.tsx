@@ -3,7 +3,7 @@
 import { switchChain } from '@wagmi/core';
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC } from 'react';
-import { CHAIN_NAMES, SUPPORTED_CHAIN_IDS } from 'configs/chains';
+import { chainNames, supportedChainIds } from 'configs/chains';
 import { chainIdAtom, walletChainIdAtom } from 'lib/states/web3';
 import { cn } from 'lib/utils/shadcn';
 import { wagmiConfig } from 'lib/utils/wagmi';
@@ -27,13 +27,13 @@ export const SwitchChain: FC<ComponentProps<'div'>> = ({ className, ...props }) 
           {walletChainId != null && walletChainId !== chainId ? (
             <Button variant="destructive">Wrong network</Button>
           ) : (
-            <Button variant="outline">{CHAIN_NAMES[chainId]}</Button>
+            <Button variant="outline">{chainNames[chainId]}</Button>
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
-          {SUPPORTED_CHAIN_IDS.map(chainId => (
+          {supportedChainIds.map(chainId => (
             <DropdownMenuItem key={chainId} onClick={() => switchChain(wagmiConfig, { chainId })}>
-              {CHAIN_NAMES[chainId]}
+              {chainNames[chainId]}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

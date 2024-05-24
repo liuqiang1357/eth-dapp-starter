@@ -18,10 +18,10 @@ export type FormatNumberOptions = {
   defaultText?: string;
 };
 
-const GROUP_SIZE = 3;
-const GROUP_SYMBOLS = ['k', 'm', 'b', 't'];
+const groupSize = 3;
+const groupSymbols = ['k', 'm', 'b', 't'];
 
-const BIG_NUMBER_ROUNDING_MODES = {
+const bigNumberRoundingModes = {
   up: BigNumber.ROUND_UP,
   down: BigNumber.ROUND_DOWN,
   'half-up': BigNumber.ROUND_HALF_UP,
@@ -66,17 +66,11 @@ export function formatNumber(
   }
 
   if (precision != null && !useLimitValue) {
-    bn = bn.sd(
-      precision,
-      roundingMode != null ? BIG_NUMBER_ROUNDING_MODES[roundingMode] : undefined,
-    );
+    bn = bn.sd(precision, roundingMode != null ? bigNumberRoundingModes[roundingMode] : undefined);
   }
   const roundToDecimals = () => {
     if (decimals != null && !useLimitValue) {
-      bn = bn.dp(
-        decimals,
-        roundingMode != null ? BIG_NUMBER_ROUNDING_MODES[roundingMode] : undefined,
-      );
+      bn = bn.dp(decimals, roundingMode != null ? bigNumberRoundingModes[roundingMode] : undefined);
     }
   };
 
@@ -90,15 +84,15 @@ export function formatNumber(
   if (type === 'compact') {
     if (bn.isFinite()) {
       roundToDecimals();
-      for (let i = 0; i < GROUP_SYMBOLS.length; i++) {
-        if (bn.gte(10 ** GROUP_SIZE) || bn.lte(-(10 ** GROUP_SIZE))) {
-          bn = bn.div(10 ** GROUP_SIZE);
-          compactSuffix = GROUP_SYMBOLS[i];
+      for (let i = 0; i < groupSymbols.length; i++) {
+        if (bn.gte(10 ** groupSize) || bn.lte(-(10 ** groupSize))) {
+          bn = bn.div(10 ** groupSize);
+          compactSuffix = groupSymbols[i];
           roundToDecimals();
         }
       }
-      let exponent = GROUP_SYMBOLS.length * 3;
-      if (bn.gte(10 ** GROUP_SIZE) || bn.lte(-(10 ** GROUP_SIZE))) {
+      let exponent = groupSymbols.length * 3;
+      if (bn.gte(10 ** groupSize) || bn.lte(-(10 ** groupSize))) {
         const e = bn.e;
         invariant(e != null, 'E');
         bn = bn.shiftedBy(-e);
@@ -150,7 +144,7 @@ export function formatNumber(
   const formatOptions = {
     decimalSeparator: '.',
     groupSeparator: useGroupSeparator ? ',' : '',
-    groupSize: GROUP_SIZE,
+    groupSize,
   };
 
   const digits =
