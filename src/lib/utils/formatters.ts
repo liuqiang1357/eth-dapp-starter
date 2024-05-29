@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { format, formatDistanceToNowStrict, toDate } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
 import invariant from 'tiny-invariant';
 import UString from 'uni-string';
 
@@ -184,16 +185,24 @@ export function formatLongText(
 
 export type FormatTimeOptions = {
   short?: boolean;
+  utc?: boolean;
 };
 
 export function formatTime(
   value: string | number | null | undefined,
-  { short = false }: FormatTimeOptions = {},
+  { short = false, utc = false }: FormatTimeOptions = {},
 ): string {
   if (value == null) {
     return '-';
   }
-  return format(toDate(value), short ? 'yyyy-dd-MM HH:mm:ss' : "MMM dd yyyy HH:mm:ss a xxx 'UTC'");
+  return format(
+    utc ? toZonedTime(toDate(value), 'UTC') : toDate(value),
+    short
+      ? 'yyyy-MM-dd HH:mm:ss'
+      : utc
+        ? "MMM dd yyyy HH:mm:ss a 'UTC'"
+        : "MMM dd yyyy HH:mm:ss a xxx 'UTC'",
+  );
 }
 
 export type FormatTimeFromNowOptions = {

@@ -14,7 +14,7 @@ import { wagmiConfig } from 'lib/utils/wagmi';
 
 export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
   return useQuery({
-    queryKey: ['TokenDecimals', params],
+    queryKey: ['token-decimals', params],
     queryFn:
       params != null
         ? async () => {
@@ -27,7 +27,7 @@ export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
 
 export function useTokenSymbol(params: GetTokenSymbolParams | null) {
   return useQuery({
-    queryKey: ['TokenSymbol', params],
+    queryKey: ['token-symbol', params],
     queryFn:
       params != null
         ? async () => {
@@ -46,7 +46,7 @@ export function useTokenBalance(params: UseTokenBalanceParams | null) {
   );
   const getTokenBalanceParams = params != null && decimals != null ? { ...params, decimals } : null;
   return useQuery({
-    queryKey: ['TokenBalance', getTokenBalanceParams],
+    queryKey: ['token-balance', getTokenBalanceParams],
     queryFn:
       getTokenBalanceParams != null
         ? async () => {
@@ -64,7 +64,7 @@ export function useTransferToken() {
       const hash = await transferToken(params);
       await waitForTransactionReceipt(wagmiConfig, { chainId: params.chainId, hash });
       await queryClient.invalidateQueries({
-        queryKey: ['TokenBalance', { chainId: params.chainId, account: params.account }],
+        queryKey: ['token-balance', { chainId: params.chainId, account: params.account }],
       });
     },
   });
