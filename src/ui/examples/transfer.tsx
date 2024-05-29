@@ -1,5 +1,6 @@
 'use client';
 
+import { skipToken } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { isAddress } from 'viem';
@@ -10,7 +11,7 @@ import {
   useTokenDecimals,
   useTokenSymbol,
   useTransferToken,
-} from 'lib/hooks/tokens';
+} from 'lib/hooks/examples';
 import { accountAtom, chainIdAtom } from 'lib/states/web3';
 import { formatNumber } from 'lib/utils/formatters';
 import { cn } from 'lib/utils/shadcn';
@@ -34,15 +35,15 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
   const { data: balance } = useTokenBalance(
     chainId === addressChainId && account != null && isAddress(address)
       ? { chainId, account, address }
-      : null,
+      : skipToken,
   );
 
   const { data: symbol } = useTokenSymbol(
-    chainId === addressChainId && isAddress(address) ? { chainId, address } : null,
+    chainId === addressChainId && isAddress(address) ? { chainId, address } : skipToken,
   );
 
   const { data: decimals } = useTokenDecimals(
-    chainId === addressChainId && isAddress(address) ? { chainId, address } : null,
+    chainId === addressChainId && isAddress(address) ? { chainId, address } : skipToken,
   );
 
   const [to, setTo] = useState('');

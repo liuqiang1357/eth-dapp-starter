@@ -1,4 +1,4 @@
-import { skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { SkipToken, skipToken, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import {
   getTokenBalance,
@@ -9,14 +9,14 @@ import {
   GetTokenSymbolParams,
   transferToken,
   TransferTokenParams,
-} from 'lib/apis/tokens';
+} from 'lib/apis/examples';
 import { wagmiConfig } from 'lib/utils/wagmi';
 
-export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
+export function useTokenDecimals(params: GetTokenDecimalsParams | SkipToken) {
   return useQuery({
     queryKey: ['token-decimals', params],
     queryFn:
-      params != null
+      params !== skipToken
         ? async () => {
             return await getTokenDecimals(params);
           }
@@ -25,11 +25,11 @@ export function useTokenDecimals(params: GetTokenDecimalsParams | null) {
   });
 }
 
-export function useTokenSymbol(params: GetTokenSymbolParams | null) {
+export function useTokenSymbol(params: GetTokenSymbolParams | SkipToken) {
   return useQuery({
     queryKey: ['token-symbol', params],
     queryFn:
-      params != null
+      params !== skipToken
         ? async () => {
             return await getTokenSymbol(params);
           }
@@ -40,15 +40,16 @@ export function useTokenSymbol(params: GetTokenSymbolParams | null) {
 
 export type UseTokenBalanceParams = Omit<GetTokenBalanceParams, 'decimals'>;
 
-export function useTokenBalance(params: UseTokenBalanceParams | null) {
+export function useTokenBalance(params: UseTokenBalanceParams | SkipToken) {
   const { data: decimals } = useTokenDecimals(
-    params != null ? { chainId: params.chainId, address: params.address } : null,
+    params !== skipToken ? { chainId: params.chainId, address: params.address } : skipToken,
   );
-  const getTokenBalanceParams = params != null && decimals != null ? { ...params, decimals } : null;
+  const getTokenBalanceParams =
+    params !== skipToken && decimals != null ? { ...params, decimals } : skipToken;
   return useQuery({
     queryKey: ['token-balance', getTokenBalanceParams],
     queryFn:
-      getTokenBalanceParams != null
+      getTokenBalanceParams !== skipToken
         ? async () => {
             return await getTokenBalance(getTokenBalanceParams);
           }
