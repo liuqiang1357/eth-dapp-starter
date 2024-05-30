@@ -11,19 +11,23 @@ type SetStateActionWithReset<Value> =
   | typeof RESET
   | ((prev: Value) => Value | typeof RESET);
 
-export function atomWithSchema<Value extends Json, DefaultValue extends Value>(
-  baseAtom: WritableAtom<Json, [SetStateActionWithReset<Json>], void>,
+export function atomWithSchema<
+  Value extends Json,
+  DefaultValue extends Value,
+  ExtraArgs extends unknown[],
+>(
+  baseAtom: WritableAtom<Json, [SetStateActionWithReset<Json>, ...ExtraArgs], void>,
   schema: ZodSchema<Value, ZodTypeDef, unknown>,
   defaultValue: DefaultValue,
-): WritableAtom<Value, [SetStateActionWithReset<Value>], void> {
+): WritableAtom<Value, [SetStateActionWithReset<Value>, ...ExtraArgs], void> {
   const derivedAtom = atom(
     get => {
       const result = schema.safeParse(get(baseAtom));
       return result.success ? result.data : defaultValue;
     },
-    (get, set, update: SetStateActionWithReset<Value>) => {
+    (get, set, update: SetStateActionWithReset<Value>, ...args: ExtraArgs) => {
       const nextValue = typeof update === 'function' ? update(get(derivedAtom)) : update;
-      set(baseAtom, nextValue === defaultValue ? RESET : nextValue);
+      set(baseAtom, nextValue === defaultValue ? RESET : nextValue, ...args);
     },
   );
   return derivedAtom;
@@ -39,16 +43,22 @@ export function atomWithStorage<Value extends Json, DefaultValue extends Value>(
   return atomWithSchema(baseAtom, schema, defaultValue);
 }
 
+export type SetSearchParamsOptions = {
+  usePush?: boolean;
+};
+
 export function atomWithSearchParams(): WritableAtom<
   URLSearchParams | null,
-  [SetStateAction<URLSearchParams | null>],
+  [SetStateAction<URLSearchParams | null>, options?: SetSearchParamsOptions],
   void
 > {
   const baseAtom = atom<URLSearchParams | null>(null);
 
   baseAtom.onMount = setAtom => {
     const update = () => {
-      setAtom(new URLSearchParams(window.location.search));
+      setTimeout(() => {
+        setAtom(new URLSearchParams(window.location.search));
+      });
     };
 
     const originPushState = window.history.pushState;
@@ -75,25 +85,34 @@ export function atomWithSearchParams(): WritableAtom<
 
   const derivedAtom = atom(
     get => get(baseAtom),
-    (get, set, update: SetStateAction<URLSearchParams | null>) => {
+    (
+      get,
+      set,
+      update: SetStateAction<URLSearchParams | null>,
+      options?: SetSearchParamsOptions,
+    ) => {
       const nextValue = typeof update === 'function' ? update(get(derivedAtom)) : update;
       set(baseAtom, nextValue);
 
       const url = new URL(window.location.href);
       url.search = nextValue?.toString() ?? '';
-      window.history.replaceState(history.state, '', url);
+      if (options?.usePush === true) {
+        window.history.pushState(history.state, '', url);
+      } else {
+        window.history.replaceState(history.state, '', url);
+      }
     },
   );
   return derivedAtom;
 }
 
-const searchParamsAtom = atomWithSearchParams();
+export const searchParamsAtom = atomWithSearchParams();
 
 export function atomWithSearchParam<Value extends Json, DefaultValue extends Value>(
   key: string,
   schema: ZodSchema<Value, ZodTypeDef, unknown>,
   defaultValue: DefaultValue,
-): WritableAtom<Value, [SetStateActionWithReset<Value>], void> {
+): WritableAtom<Value, [SetStateActionWithReset<Value>, options?: SetSearchParamsOptions], void> {
   const baseAtom = atom(
     get => {
       const searchParam = get(searchParamsAtom)?.get(key);
@@ -103,7 +122,7 @@ export function atomWithSearchParam<Value extends Json, DefaultValue extends Val
         return deserialize(searchParam);
       }
     },
-    (get, set, update: SetStateActionWithReset<Json>) => {
+    (get, set, update: SetStateActionWithReset<Json>, options?: SetSearchParamsOptions) => {
       const nextValue = typeof update === 'function' ? update(get(baseAtom)) : update;
       const searchParams = new URLSearchParams(get(searchParamsAtom) ?? undefined);
       if (nextValue === RESET) {
@@ -111,7 +130,7 @@ export function atomWithSearchParam<Value extends Json, DefaultValue extends Val
       } else {
         searchParams.set(key, serialize(nextValue));
       }
-      set(searchParamsAtom, searchParams);
+      set(searchParamsAtom, searchParams, options);
     },
   );
   return atomWithSchema(baseAtom, schema, defaultValue);
