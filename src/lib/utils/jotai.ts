@@ -43,94 +43,79 @@ export function atomWithStorage<Value extends Json, DefaultValue extends Value>(
   return atomWithSchema(baseAtom, schema, defaultValue);
 }
 
-export type SetSearchParamsOptions = {
+export type SetHashParamsOptions = {
   usePush?: boolean;
 };
 
-export function atomWithSearchParams(): WritableAtom<
+export function atomWithHashParams(): WritableAtom<
   URLSearchParams | null,
-  [SetStateAction<URLSearchParams | null>, options?: SetSearchParamsOptions],
+  [SetStateAction<URLSearchParams | null>, options?: SetHashParamsOptions],
   void
 > {
   const baseAtom = atom<URLSearchParams | null>(null);
 
   baseAtom.onMount = setAtom => {
     const update = () => {
-      setTimeout(() => {
-        setAtom(new URLSearchParams(window.location.search));
-      });
+      setAtom(new URLSearchParams(window.location.hash.replace(/^#/, '')));
     };
 
-    const originPushState = window.history.pushState;
-    const originReplaceState = window.history.replaceState;
-
-    window.history.pushState = (...args: Parameters<typeof originPushState>) => {
-      originPushState.call(window.history, ...args);
-      update();
-    };
-    window.history.replaceState = (...args: Parameters<typeof originReplaceState>) => {
-      originReplaceState.call(window.history, ...args);
-      update();
-    };
-    window.addEventListener('popstate', update);
-
+    window.addEventListener('hashchange', update);
     update();
 
     return () => {
-      window.history.pushState = originPushState;
-      window.history.replaceState = originReplaceState;
-      window.removeEventListener('popstate', update);
+      window.removeEventListener('hashchange', update);
     };
   };
 
   const derivedAtom = atom(
     get => get(baseAtom),
-    (
-      get,
-      set,
-      update: SetStateAction<URLSearchParams | null>,
-      options?: SetSearchParamsOptions,
-    ) => {
+    (get, set, update: SetStateAction<URLSearchParams | null>, options?: SetHashParamsOptions) => {
       const nextValue = typeof update === 'function' ? update(get(derivedAtom)) : update;
       set(baseAtom, nextValue);
 
       const url = new URL(window.location.href);
-      url.search = nextValue?.toString() ?? '';
+      url.hash = nextValue?.toString() ?? '';
       if (options?.usePush === true) {
-        window.history.pushState(history.state, '', url);
+        window.history.pushState(null, '', url);
       } else {
-        window.history.replaceState(history.state, '', url);
+        window.history.replaceState(null, '', url);
       }
     },
   );
   return derivedAtom;
 }
 
-export const searchParamsAtom = atomWithSearchParams();
+export const hashParamsAtom = atomWithHashParams();
 
-export function atomWithSearchParam<Value extends Json, DefaultValue extends Value>(
+export type SetHashParamOptions = SetHashParamsOptions & {
+  clearAll?: boolean;
+};
+
+export function atomWithHashParam<Value extends Json, DefaultValue extends Value>(
   key: string,
   schema: ZodSchema<Value, ZodTypeDef, unknown>,
   defaultValue: DefaultValue,
-): WritableAtom<Value, [SetStateActionWithReset<Value>, options?: SetSearchParamsOptions], void> {
+): WritableAtom<Value, [SetStateActionWithReset<Value>, options?: SetHashParamOptions], void> {
   const baseAtom = atom(
     get => {
-      const searchParam = get(searchParamsAtom)?.get(key);
-      if (searchParam == null) {
+      const hashParam = get(hashParamsAtom)?.get(key);
+      if (hashParam == null) {
         return defaultValue;
       } else {
-        return deserialize(searchParam);
+        return deserialize(hashParam);
       }
     },
-    (get, set, update: SetStateActionWithReset<Json>, options?: SetSearchParamsOptions) => {
+    (get, set, update: SetStateActionWithReset<Json>, options?: SetHashParamOptions) => {
       const nextValue = typeof update === 'function' ? update(get(baseAtom)) : update;
-      const searchParams = new URLSearchParams(get(searchParamsAtom) ?? undefined);
+      const hashParams = new URLSearchParams(
+        options?.clearAll === true ? undefined : get(hashParamsAtom) ?? undefined,
+      );
       if (nextValue === RESET) {
-        searchParams.delete(key);
+        hashParams.delete(key);
       } else {
-        searchParams.set(key, serialize(nextValue));
+        hashParams.set(key, serialize(nextValue));
       }
-      set(searchParamsAtom, searchParams, options);
+      set(hashParamsAtom, hashParams, options);
     },
   );
   return atomWithSchema(baseAtom, schema, defaultValue);
