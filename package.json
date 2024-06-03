@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "lint": "eslint . --max-warnings 0",
     "prepare": "mookme init --only-hook --types pre-commit",
     "start": "next start",

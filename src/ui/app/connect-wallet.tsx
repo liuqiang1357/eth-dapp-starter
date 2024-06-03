@@ -23,7 +23,9 @@ export const ConnectWallet: FC<ComponentProps<'div'>> = ({ className, ...props }
               <div className="group relative">
                 <Button variant="outline" className="flex items-center group-hover:opacity-0">
                   <AccountIcon address={account.address} size={20} />
-                  <div className="ml-2">{formatLongText(account.address, { headLength: 5 })}</div>
+                  <div className="ml-2">
+                    {formatLongText(account.address, { headTailLength: 4 })}
+                  </div>
                 </Button>
                 <Button
                   variant="destructive"
