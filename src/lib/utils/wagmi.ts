@@ -20,8 +20,8 @@ const chains: ChainMap<Chain> = {
 };
 
 export const wagmiConfig = getDefaultConfig({
-  appName: 'OpenSwap',
-  projectId: '6fc6f515daaa4b001616766bc028bffa',
+  appName: 'demo',
+  projectId: '83333dd2a970d5644e1318f9370b15a1',
   chains: supportedChainIds.map(chainId => chains[chainId]) as [Chain, ...Chain[]],
   ssr: true,
 });
