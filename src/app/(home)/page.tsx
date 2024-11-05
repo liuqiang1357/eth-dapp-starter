@@ -1,3 +1,14 @@
+import Link from 'next/link';
+
 export default function Page() {
-  return <div className="container pt-3">Home</div>;
+  return (
+    <div className="container pt-3">
+      <h1>Home</h1>
+      <div className="mt-3 flex flex-col space-y-2">
+        <Link className="text-primary" href="/examples">
+          See examples
+        </Link>
+      </div>
+    </div>
+  );
 }
