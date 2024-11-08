@@ -2,10 +2,10 @@
 
 import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Loader2 } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from 'lib/utils/shadcn';
+import { Loader } from 'ui/svgs/loader';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
@@ -64,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={finalDisabled}
         {...props}
       >
-        {loading ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
+        {loading ? <Loader className="mr-2 size-4 animate-spin" /> : null}
         <Slottable>{children}</Slottable>
       </Comp>
     );
