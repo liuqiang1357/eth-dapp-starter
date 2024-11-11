@@ -1,6 +1,6 @@
 import { QueryCache, QueryClient } from '@tanstack/react-query';
 import { stringify } from 'viem';
-import { lastErrorAtom } from 'lib/states/errors';
+import { lastErrorAtom } from '@/lib/states/errors';
 import { store } from './jotai';
 
 export const queryClient = new QueryClient({

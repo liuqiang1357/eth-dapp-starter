@@ -108,7 +108,7 @@ export function atomWithHashParam<Value extends Json, DefaultValue extends Value
     (get, set, update: SetStateActionWithReset<Json>, options?: SetHashParamOptions) => {
       const nextValue = typeof update === 'function' ? update(get(baseAtom)) : update;
       const hashParams = new URLSearchParams(
-        options?.clearAll === true ? undefined : get(hashParamsAtom) ?? undefined,
+        options?.clearAll === true ? undefined : (get(hashParamsAtom) ?? undefined),
       );
       if (nextValue === RESET) {
         hashParams.delete(key);

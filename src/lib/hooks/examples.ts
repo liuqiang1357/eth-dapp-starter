@@ -9,8 +9,8 @@ import {
   GetTokenSymbolParams,
   transferToken,
   TransferTokenParams,
-} from 'lib/apis/examples';
-import { wagmiConfig } from 'lib/utils/wagmi';
+} from '@/lib/apis/examples';
+import { wagmiConfig } from '@/lib/utils/wagmi';
 
 export function useTokenDecimals(params: GetTokenDecimalsParams | SkipToken) {
   return useQuery({

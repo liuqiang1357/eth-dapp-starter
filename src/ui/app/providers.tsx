@@ -6,10 +6,10 @@ import { Provider as JotaiProvider } from 'jotai';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { FC, ReactNode } from 'react';
 import { WagmiProvider } from 'wagmi';
-import { store } from 'lib/utils/jotai';
-import { queryClient } from 'lib/utils/react-query';
-import { wagmiConfig } from 'lib/utils/wagmi';
-import { Toaster } from 'ui/shadcn/sonner';
+import { store } from '@/lib/utils/jotai';
+import { queryClient } from '@/lib/utils/react-query';
+import { wagmiConfig } from '@/lib/utils/wagmi';
+import { Toaster } from '@/ui/shadcn/sonner';
 import { ConnectKitProvider } from './connectkit-provider';
 import { ErrorHandler } from './error-handler';
 

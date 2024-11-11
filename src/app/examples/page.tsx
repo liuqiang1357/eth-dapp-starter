@@ -1,4 +1,4 @@
-import { Transfer } from 'ui/examples/transfer';
+import { Transfer } from '@/ui/examples/transfer';
 
 export default function Page() {
   return (

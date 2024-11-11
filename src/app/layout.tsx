@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { ReactNode } from 'react';
-import 'styles/index.css';
-import { fontsClassName } from 'lib/utils/fonts';
-import { Header } from 'ui/app/header';
-import { Providers } from 'ui/app/providers';
+import '@/styles/index.css';
+import { fontsClassName } from '@/lib/utils/fonts';
+import { Header } from '@/ui/app/header';
+import { Providers } from '@/ui/app/providers';
 
 export const metadata: Metadata = {
   title: 'Eth Dapp Starter',

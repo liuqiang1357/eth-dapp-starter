@@ -4,19 +4,19 @@ import { skipToken } from '@tanstack/react-query';
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC, useEffect, useState } from 'react';
 import { isAddress } from 'viem';
-import { wethAddresses } from 'configs/addresses';
-import { ChainId } from 'configs/chains';
+import { wethAddresses } from '@/configs/addresses';
+import { ChainId } from '@/configs/chains';
 import {
   useTokenBalance,
   useTokenDecimals,
   useTokenSymbol,
   useTransferToken,
-} from 'lib/hooks/examples';
-import { accountAtom, chainIdAtom } from 'lib/states/web3';
-import { formatNumber } from 'lib/utils/formatters';
-import { cn } from 'lib/utils/shadcn';
-import { Button } from 'ui/shadcn/button';
-import { Input } from 'ui/shadcn/input';
+} from '@/lib/hooks/examples';
+import { accountAtom, chainIdAtom } from '@/lib/states/web3';
+import { formatNumber } from '@/lib/utils/formatters';
+import { cn } from '@/lib/utils/shadcn';
+import { Button } from '@/ui/shadcn/button';
+import { Input } from '@/ui/shadcn/input';
 
 export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   const account = useAtomValue(accountAtom);

@@ -3,14 +3,14 @@
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { ComponentProps, FC } from 'react';
-import { cn } from 'lib/utils/shadcn';
-import { Button } from 'ui/shadcn/button';
+import { cn } from '@/lib/utils/shadcn';
+import { Button } from '@/ui/shadcn/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/shadcn/dropdown-menu';
+} from '@/ui/shadcn/dropdown-menu';
 
 export const SwitchTheme: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   const { setTheme } = useTheme();

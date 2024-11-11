@@ -3,8 +3,8 @@
 import { useAtom } from 'jotai';
 import { FC, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
-import { BaseError } from 'lib/errors/base';
-import { lastErrorAtom } from 'lib/states/errors';
+import { BaseError } from '@/lib/errors/base';
+import { lastErrorAtom } from '@/lib/states/errors';
 
 export const ErrorHandler: FC = () => {
   const [lastError, setLastError] = useAtom(lastErrorAtom);

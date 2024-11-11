@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from 'ui/shadcn/button';
+import { Button } from '@/ui/shadcn/button';
 
 export default function Error() {
   return (

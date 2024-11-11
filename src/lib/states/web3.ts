@@ -6,8 +6,8 @@ import {
   watchChainId,
 } from '@wagmi/core';
 import { atom } from 'jotai';
-import { supportedChainIds } from 'configs/chains';
-import { wagmiConfig } from 'lib/utils/wagmi';
+import { supportedChainIds } from '@/configs/chains';
+import { wagmiConfig } from '@/lib/utils/wagmi';
 
 const chainIdBaseAtom = atom(supportedChainIds[0]);
 

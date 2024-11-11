@@ -8,8 +8,8 @@ import {
 } from 'viem';
 import { arbitrum, goerli, mainnet, sepolia } from 'viem/chains';
 import { createConfig } from 'wagmi';
-import { ChainId, ChainMap, supportedChainIds } from 'configs/chains';
-import { ChainMismatchError, UserRejectedRequestError, Web3Error } from 'lib/errors/web3';
+import { ChainId, ChainMap, supportedChainIds } from '@/configs/chains';
+import { ChainMismatchError, UserRejectedRequestError, Web3Error } from '@/lib/errors/web3';
 
 // Hotfix for connectkit: ENS-related requests will use this if mainnet is not in supported chains.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

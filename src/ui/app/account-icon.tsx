@@ -3,7 +3,7 @@
 import { Types } from 'connectkit';
 import { ComponentProps, FC } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { cn } from 'lib/utils/shadcn';
+import { cn } from '@/lib/utils/shadcn';
 
 type Props = ComponentProps<'div'> & Types.CustomAvatarProps;
 

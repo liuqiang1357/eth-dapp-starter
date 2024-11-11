@@ -1,9 +1,9 @@
 import { readContract, writeContract } from '@wagmi/core';
 import { Address, Hash } from 'viem';
-import { ChainId } from 'configs/chains';
-import { ierc20Abi } from 'lib/abis/ierc20';
-import { amountToRawAmount, rawAmountToAmount } from 'lib/utils/misc';
-import { wagmiConfig } from 'lib/utils/wagmi';
+import { ChainId } from '@/configs/chains';
+import { ierc20Abi } from '@/lib/abis/ierc20';
+import { amountToRawAmount, rawAmountToAmount } from '@/lib/utils/misc';
+import { wagmiConfig } from '@/lib/utils/wagmi';
 
 export type GetTokenDecimalsParams = {
   chainId: ChainId;
