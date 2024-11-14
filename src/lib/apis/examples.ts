@@ -1,9 +1,9 @@
 import { readContract, writeContract } from '@wagmi/core';
 import { Address, Hash } from 'viem';
 import { ChainId } from '@/configs/chains';
-import { ierc20Abi } from '@/lib/abis/ierc20';
-import { amountToRawAmount, rawAmountToAmount } from '@/lib/utils/misc';
-import { wagmiConfig } from '@/lib/utils/wagmi';
+import { ierc20Abi } from '../abis/ierc20';
+import { amountToRawAmount, rawAmountToAmount } from '../utils/misc';
+import { wagmiConfig } from '../utils/wagmi';
 
 export type GetTokenDecimalsParams = {
   chainId: ChainId;
@@ -37,8 +37,8 @@ export async function getTokenSymbol(params: GetTokenDecimalsParams): Promise<st
 
 export type GetTokenBalanceParams = {
   chainId: ChainId;
-  account: Address;
   address: Address;
+  account: Address;
   decimals: number;
 };
 
@@ -55,8 +55,8 @@ export async function getTokenBalance(params: GetTokenBalanceParams): Promise<st
 
 export type TransferTokenParams = {
   chainId: ChainId;
-  account: Address;
   address: Address;
+  account: Address;
   decimals: number;
   to: Address;
   amount: string;

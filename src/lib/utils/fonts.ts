@@ -5,4 +5,4 @@ const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' });
 
 const fontMono = FontMono({ subsets: ['latin'], variable: '--font-mono' });
 
-export const fontsClassName = cn(fontSans.className, fontSans.variable, fontMono.variable);
+export const fontsClassName = cn(fontSans.variable, fontMono.variable);

@@ -23,27 +23,27 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
 
   const chainId = useAtomValue(chainIdAtom);
 
-  const [addressChainId, setAddressChainId] = useState<ChainId | null>(null);
+  const [tokenChainId, setTokenChainId] = useState<ChainId | null>(null);
 
-  const [address, setAddress] = useState('');
+  const [token, setToken] = useState('');
 
-  const changeAddress = (text: string) => {
-    setAddressChainId(chainId);
-    setAddress(text);
+  const changeToken = (text: string) => {
+    setTokenChainId(chainId);
+    setToken(text);
   };
 
   const { data: balance } = useTokenBalance(
-    chainId === addressChainId && account != null && isAddress(address)
-      ? { chainId, account, address }
+    chainId === tokenChainId && account != null && isAddress(token)
+      ? { chainId, address: token, account }
       : skipToken,
   );
 
   const { data: symbol } = useTokenSymbol(
-    chainId === addressChainId && isAddress(address) ? { chainId, address } : skipToken,
+    chainId === tokenChainId && isAddress(token) ? { chainId, address: token } : skipToken,
   );
 
   const { data: decimals } = useTokenDecimals(
-    chainId === addressChainId && isAddress(address) ? { chainId, address } : skipToken,
+    chainId === tokenChainId && isAddress(token) ? { chainId, address: token } : skipToken,
   );
 
   const [to, setTo] = useState('');
@@ -54,20 +54,20 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
 
   const transferToken = async () => {
     if (
-      chainId === addressChainId &&
+      chainId === tokenChainId &&
       account != null &&
-      isAddress(address) &&
+      isAddress(token) &&
       decimals != null &&
       isAddress(to) &&
       amount !== ''
     ) {
-      await transferTokenAsync({ chainId, account, address, decimals, to, amount });
+      await transferTokenAsync({ chainId, address: token, account, decimals, to, amount });
     }
   };
 
   useEffect(() => {
-    setAddressChainId(chainId);
-    setAddress(wethAddresses[chainId] ?? '');
+    setTokenChainId(chainId);
+    setToken(wethAddresses[chainId] ?? '');
   }, [chainId]);
 
   return (
@@ -79,7 +79,7 @@ export const Transfer: FC<ComponentProps<'div'>> = ({ className, ...props }) => 
       <div>{account}</div>
 
       <div>Token:</div>
-      <Input value={address} onChange={event => changeAddress(event.target.value)} />
+      <Input value={token} onChange={event => changeToken(event.target.value)} />
 
       <div>Balance:</div>
       <div>

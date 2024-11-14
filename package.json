@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
     "dev": "next dev",
-    "lint": "eslint --max-warnings 0 .",
-    "prepare": "mookme init --only-hook --types pre-commit",
+    "build": "next build",
     "start": "next start",
-    "storybook": "storybook dev -p 6006",
+    "typecheck": "tsc",
+    "lint": "eslint --max-warnings 0 .",
     "test": "vitest run",
-    "typecheck": "tsc"
+    "storybook": "storybook dev -p 6006",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.1.2",
@@ -43,7 +43,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@escape.tech/mookme": "2.5.0",
     "@eslint/js": "^9.14.0",
     "@next/eslint-plugin-next": "^15.0.3",
     "@storybook/addon-essentials": "^8.4.2",
@@ -64,6 +63,7 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-storybook": "^0.11.0",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "postcss": "^8.4.48",
     "prettier": "^3.3.3",
@@ -76,5 +76,14 @@
     "typescript-eslint": "^8.13.0",
     "vite-tsconfig-paths": "^5.1.2",
     "vitest": "^2.1.4"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "connectkit": "patches/connectkit.patch"
+    }
   }
 }

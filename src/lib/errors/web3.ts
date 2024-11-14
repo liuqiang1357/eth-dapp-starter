@@ -13,3 +13,9 @@ export class UserRejectedRequestError extends Web3Error {
     super(message, options);
   }
 }
+
+export class ConnectorNotConnectedError extends Web3Error {
+  constructor(message = 'Wallet not connected.', options: BaseErrorOptions = {}) {
+    super(message, options);
+  }
+}

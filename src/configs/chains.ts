@@ -1,4 +1,4 @@
-import { targetMainnet } from './targets';
+import { target, Target } from './targets';
 
 export enum ChainId {
   Mainnet = 1,
@@ -7,11 +7,12 @@ export enum ChainId {
   Goerli = 5,
 }
 
-export type ChainMap<T> = Record<ChainId, T>;
+export const chainIds = {
+  [Target.MainNet]: [ChainId.Mainnet, ChainId.Arbitrum],
+  [Target.TestNet]: [ChainId.Sepolia, ChainId.Goerli],
+}[target];
 
-export const supportedChainIds = targetMainnet
-  ? [ChainId.Mainnet, ChainId.Arbitrum]
-  : [ChainId.Sepolia, ChainId.Goerli];
+export type ChainMap<T> = Record<ChainId, T>;
 
 export const chainNames: ChainMap<string> = {
   [ChainId.Mainnet]: 'Mainnet',

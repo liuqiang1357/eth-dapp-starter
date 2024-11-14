@@ -1,6 +1,0 @@
-{
-  "steps": [
-    { "name": "typecheck", "command": "pnpm typecheck" },
-    { "name": "lint", "command": "pnpm lint-staged" }
-  ]
-}

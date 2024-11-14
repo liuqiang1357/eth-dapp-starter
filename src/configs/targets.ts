@@ -9,5 +9,3 @@ export const target = $enum(Target).asValueOrDefault(
   process.env.NEXT_PUBLIC_TARGET,
   Target.MainNet,
 );
-
-export const targetMainnet = target === Target.MainNet;
