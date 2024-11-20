@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <body className={fontsClassName}>
         <Providers>
-          <div className="flex min-h-screen min-w-[1440px] flex-col">
+          <div className="flex min-h-screen min-w-[1400px] flex-col">
             <Header />
             {children}
           </div>
