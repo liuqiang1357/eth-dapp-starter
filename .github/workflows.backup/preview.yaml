@@ -12,12 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
+          cache: pnpm
       - name: Install Vercel CLI
         run: pnpm install --global vercel
       - name: Pull Vercel Environment Information
