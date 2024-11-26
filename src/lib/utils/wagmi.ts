@@ -52,7 +52,7 @@ export function convertMaybeWagmiError(error: Error): Error {
   }
   if (error instanceof WagmiBaseError) {
     if (error instanceof WagmiConnectorNotConnectedError) {
-      return new ConnectorNotConnectedError(error.shortMessage, { cause: error });
+      return new ConnectorNotConnectedError(undefined, { cause: error });
     }
     return new Web3Error(error.shortMessage, { cause: error });
   }
