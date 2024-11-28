@@ -76,9 +76,6 @@ importers:
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.5.4
-      tiny-invariant:
-        specifier: ^1.3.3
-        version: 1.3.3
       ts-enum-util:
         specifier: ^4.1.0
         version: 4.1.0
