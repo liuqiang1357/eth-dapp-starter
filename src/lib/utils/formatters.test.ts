@@ -1,6 +1,6 @@
 import { formatLongText, formatNumber } from './formatters';
 
-describe('#formatNumber', () => {
+describe('formatNumber', () => {
   test('type works', () => {
     expect(formatNumber('1.234', { type: 'standard' })).toBe('1.234');
     expect(formatNumber('-1.234', { type: 'standard' })).toBe('-1.234');
@@ -91,7 +91,7 @@ describe('#formatNumber', () => {
   });
 });
 
-describe('#formatLongText', () => {
+describe('formatLongText', () => {
   test('works', () => {
     expect(formatLongText('12345678900987654321')).toBe('12345678...87654321');
     expect(formatLongText('12345678900987654321', { headTailLength: 40 })).toBe(
