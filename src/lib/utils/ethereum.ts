@@ -16,9 +16,9 @@ import { ChainId, chainIds, ChainMap } from '@/configs/chains';
 import {
   ChainMismatchError,
   ConnectorNotConnectedError,
+  EthereumError,
   UserRejectedRequestError,
-  Web3Error,
-} from '../errors/web3';
+} from '../errors/ethereum';
 
 const chains: ChainMap<Chain> = {
   [ChainId.Mainnet]: produce(mainnet, chain => {
@@ -40,7 +40,7 @@ export const wagmiConfig = createConfig(
   }),
 );
 
-export function convertMaybeWagmiError(error: Error): Error {
+export function convertMaybeEthereumError(error: Error): Error {
   if (error instanceof ViemBaseError) {
     if (error instanceof ViemUserRejectedRequestError) {
       return new UserRejectedRequestError(error.shortMessage, { cause: error });
@@ -48,13 +48,13 @@ export function convertMaybeWagmiError(error: Error): Error {
     if (error instanceof ViemChainMismatchError) {
       return new ChainMismatchError(error.shortMessage, { cause: error });
     }
-    return new Web3Error(error.shortMessage, { cause: error });
+    return new EthereumError(error.shortMessage, { cause: error });
   }
   if (error instanceof WagmiBaseError) {
     if (error instanceof WagmiConnectorNotConnectedError) {
       return new ConnectorNotConnectedError(undefined, { cause: error });
     }
-    return new Web3Error(error.shortMessage, { cause: error });
+    return new EthereumError(error.shortMessage, { cause: error });
   }
   return error;
 }

@@ -3,7 +3,7 @@
 import { useModal } from 'connectkit';
 import { useAtomValue } from 'jotai';
 import { ComponentProps, FC } from 'react';
-import { accountAtom } from '@/lib/states/web3';
+import { accountAtom } from '@/lib/states/ethereum';
 import { formatLongText } from '@/lib/utils/formatters';
 import { cn } from '@/lib/utils/shadcn';
 import { Button } from '@/ui/shadcn/button';

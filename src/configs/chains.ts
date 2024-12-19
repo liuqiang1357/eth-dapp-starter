@@ -1,4 +1,4 @@
-import { target, Target } from './targets';
+import { target, Target } from './env';
 
 export enum ChainId {
   Mainnet = 1,
